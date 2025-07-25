@@ -8,7 +8,7 @@ import Publicite from "./Publicite";
 import PlusServices from "./PlusServices";
 import Featured from "./Featured";
 import OurProducts from "./OurProducts";
-import Footer from "./Footer";
+import Footer from "../Footer";
 
 export default function Content() {
   return (
@@ -26,7 +26,6 @@ export default function Content() {
         <Featured />
         <PlusServices />
       </div>
-      <Footer />
     </>
   );
 }

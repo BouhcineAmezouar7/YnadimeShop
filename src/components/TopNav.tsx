@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 
 export default function TopNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,30 +44,30 @@ export default function TopNav() {
                 aria-labelledby="menu-button"
               >
                 <div className="py-1" role="none">
-                  <a
+                  <Link
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 dark:black hover:bg-gray-100 dark:hover:bg-gray-100"
                     role="menuitem"
                     onClick={() => setIsOpen(false)}
                   >
                     English
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 dark:black hover:bg-gray-100 dark:hover:bg-gray-100"
                     role="menuitem"
                     onClick={() => setIsOpen(false)}
                   >
                     French
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 dark:black hover:bg-gray-100 dark:hover:bg-gray-100"
                     role="menuitem"
                     onClick={() => setIsOpen(false)}
                   >
                     Spanish
-                  </a>
+                  </Link>
                 </div>
               </div>
             )}

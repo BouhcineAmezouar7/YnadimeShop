@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import TopNav from "./TopNav";
-import MenuModal from "./MenuModal";
+import MenuModal from "./HomePage/MenuModal";
+import { usePathname } from "next/navigation";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -19,6 +20,8 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
+  const pathname = usePathname();
+
   return (
     <div>
       <TopNav />
@@ -30,21 +33,25 @@ export default function Navbar() {
         </Link>
         <div className="flex items-center gap-x-18">
           <div className="hidden xl:flex gap-x-12 font-mono">
-            <Link href="/" className=" underline underline-offset-3">
+            {/* Desktop Navigation underline in active link */}
+            <Link href="/" className={pathname === "/" ? "underline underline-offset-3" : ""}>
               Home
             </Link>
             <Link
               href="/contact"
-              className=" hover:underline underline-offset-3"
+              className={pathname === "/contact" ? "underline underline-offset-3" : ""}
             >
               Contact
             </Link>
-            <Link href="/about" className=" hover:underline underline-offset-3">
+            <Link
+              href="/about"
+              className={pathname === "/about" ? "underline underline-offset-3" : ""}
+            >
               About
             </Link>
             <Link
-              href="/singup"
-              className=" hover:underline underline-offset-3"
+              href="/signup"
+              className={pathname === "/signup" ? "underline underline-offset-3" : ""}
             >
               Sign Up
             </Link>

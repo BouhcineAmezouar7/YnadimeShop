@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const ProductsData = [
@@ -45,17 +46,6 @@ const ProductsData = [
     imageUrl:
       "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-03.jpg",
   },
-  {
-    id: 5,
-    name: "Sport Shoes",
-    color: "Black",
-    price: "$329",
-    originalPrice: "$450",
-    discount: "27%",
-    rating: 4.9,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-02.jpg",
-  },
 ];
 
 export default function Card() {
@@ -75,30 +65,31 @@ export default function Card() {
     <>
       <div className="lg:col-span-3 mt-7">
         <div className="container mx-auto px-4 sm:px-6 lg:px-0 ">
-          <div className="sm:grid lg:grid flex flex-col grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6  items-center">
+          <div className="sm:grid lg:grid flex flex-col grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  items-center">
             {ProductsData.map((product) => (
               <div
                 key={product.id}
                 className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg p-3"
               >
                 <div className="relative flex h-full flex-col justify-between rounded-lg bg-gray-50 p-4">
-                  <a className="relative mx-3 mt-3 flex h-60 " href="#">
+                  {" "}
+                  <Link href="#" className="relative mx-3 mt-3 flex h-60">
                     <img
                       className="absolute inset-0 h-full w-full object-cover"
                       src={product.imageUrl}
                       alt={product.name}
                     />
-                  </a>
+                  </Link>
                   <span className="absolute top-0 left-0 m-3 rounded-sm bg-[#DB4444] px-4 py-1 text-center text-sm font-medium text-white">
                     {product.discount}
                   </span>
                 </div>
                 <div className="mt-4 px-5 pb-2">
-                  <a href="#">
+                  <Link href="#">
                     <h5 className="text-sm font-bold tracking-tight text-slate-900">
                       {product.name} - {product.color}
                     </h5>
-                  </a>
+                  </Link>
                   <div className="mt-2 mb-2 flex items-center justify-between">
                     <p>
                       <span className="text-sm font-bold text-red-500">
@@ -123,9 +114,9 @@ export default function Card() {
           </div>
           {/* show more */}
           <div className=" lg:hidden sm:hidden flex justify-center m-6">
-            <a
+            <Link
               href="/products"
-              className="inline-flex items-center gap-2 rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300"
+              className="inline-flex items-center gap-2 rounded-md bg-[#DB4444] px-10 py-3 text-sm font-medium text-white hover:bg-[#c33b3b] transition-colors"
             >
               Show More
               <svg
@@ -142,7 +133,7 @@ export default function Card() {
                   d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                 />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

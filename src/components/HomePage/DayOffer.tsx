@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 export default function DayOffer() {
@@ -15,13 +16,13 @@ export default function DayOffer() {
               Flash Sales
             </h1>
             <div>
-              <div className="flex lg:gap-10 gap-3.5 text-gray-800 font-bold text-xs lg:text-sm">
+              <div className="flex lg:gap-10 gap-3.5 font-semibold text-xs lg:text-sm">
                 <h2>Days</h2>
                 <h2>Hours</h2>
                 <h2>Minutes</h2>
                 <h2>Seconds</h2>
               </div>
-              <div className="flex lg:gap-5 gap-2 pt-2 text-2xl lg:text-3xl text-gray-800 font-bold">
+              <div className="flex lg:gap-5 gap-2 pt-2 text-2xl lg:text-4xl font-bold">
                 <h2>12</h2>
                 <h2>:</h2>
                 <h2>24</h2>
@@ -34,26 +35,9 @@ export default function DayOffer() {
           </div>
         </div>
         <div className="hidden items-center gap-2 pt-7 md:flex lg:flex">
-          {/* <a href="/products" className="flex gap-3 items-center">
-            <h2>Show more</h2>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-5 text-gray-800 hover:text-gray-500"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-              />
-            </svg>
-          </a> */}
           <div>
             {/* view all */}
-            <button className="text-[#DB4444] text-sm font-bold mt-4 flex items-center gap-1">
+            <Link href="#" className="text-[#DB4444] text-sm font-bold mt-4 flex items-center gap-1">
               View All
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +53,7 @@ export default function DayOffer() {
                   d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                 />
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
