@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Featured() {
   return (
     <>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-0 mt-10 mb-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-0 mt-10 mb-10 py-10">
         <div className="flex gap-4">
           <div className="bg-[#DB4444] px-2.5 rounded-sm"></div>
           <h2 className="font-bold text-lg text-[#DB4444] py-2"> Featured </h2>

@@ -109,7 +109,7 @@ export default function OurProducts() {
           <div className="bg-[#DB4444] px-2.5 rounded-sm"></div>
           <h2 className="font-bold text-lg text-[#DB4444] py-2">
             {" "}
-            This month{" "}
+            Our Products{" "}
           </h2>
         </div>
         <div className="flex justify-between items-center">

@@ -1,179 +1,357 @@
 import React from "react";
 import Image from "next/image";
 
-export default function Footer() {
+export default function page() {
   return (
-    <footer className="bg-black text-white py-10">
-      <div className="container mx-auto px-4 space-y-10">
-        {/* Top Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Exclusive Section */}
-          <div className="flex flex-col gap-3">
-            <h2 className="text-2xl font-bold">Exclusive</h2>
-            <p className="font-semibold">Subscribe</p>
-            <p className="text-sm text-gray-400">
-              Get 10% off your first order
-            </p>
-            <div className="flex border border-gray-600 rounded overflow-hidden mt-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-black text-white px-4 py-2 text-sm flex-1 focus:outline-none"
-              />
-              <button className="px-3 hover:text-gray-400 transition-colors">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  className="text-white hover:text-gray-400 transition-colors duration-300"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M231.87,114l-168-95.89A16,16,0,0,0,40.92,37.34L71.55,128,40.92,218.67A16,16,0,0,0,56,240a16.15,16.15,0,0,0,7.93-2.1l167.92-96.05a16,16,0,0,0,.05-27.89ZM56,224a.56.56,0,0,0,0-.12L85.74,136H144a8,8,0,0,0,0-16H85.74L56.06,32.16A.46.46,0,0,0,56,32l168,95.83Z"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
+    <>
+      <div className="container mx-auto px-5 py-10">
+        {/* Breadcrumb */}
+        <h2 className="flex items-center gap-2 text-gray-700 font-semibold mb-8 text-sm md:text-base">
+          <span className="text-neutral-400">Home</span>
+          <span className="text-neutral-400">/</span>
+          <span>Shopping Cart</span>
+        </h2>
 
-          {/* Support Section */}
-          <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-bold">Support</h2>
-            <p className="text-sm text-gray-400">
-              111 Bijoy Sarani, Dhaka,
-              <br />
-              DH 1515, Bangladesh
-            </p>
-            <p className="text-sm text-gray-400">exclusive@gmail.com</p>
-            <p className="text-sm text-gray-400">+880 123 456 789</p>
-          </div>
+        <div className="max-w-5xl max-lg:max-w-2xl mx-auto p-4">
+          <div className="grid lg:grid-cols-3 lg:gap-x-8 gap-x-6 gap-y-8 mt-6">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-sm border border-gray-200">
+                <div className="flex gap-6 sm:gap-4 max-sm:flex-col">
+                  <div className="w-24 h-24 max-sm:w-24 max-sm:h-24 shrink-0">
+                    <img
+                      src="https://readymadeui.com/images/watch1.webp"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">
+                        Stylish Golden Watch
+                      </h3>
+                      <p className="text-[13px] font-medium text-slate-500 mt-2 flex items-center gap-2">
+                        Color:{" "}
+                        <span className="inline-block w-4 h-4 rounded-sm bg-[#ac7f48]"></span>
+                      </p>
+                    </div>
+                    <div className="mt-auto">
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        $120.00
+                      </h3>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Account Section */}
-          <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-bold">Account</h2>
-            {["My Account", "Login / Register", "Cart", "Wishlist", "Shop"].map(
-              (item) => (
-                <a
-                  href="#"
-                  key={item}
-                  className="hover:underline text-sm text-gray-300"
-                >
-                  {item}
-                </a>
-              )
-            )}
-          </div>
+                <div className="ml-auto flex flex-col">
+                  <div className="flex items-start gap-4 justify-end">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 cursor-pointer fill-slate-400 hover:fill-pink-600 inline-block"
+                      viewBox="0 0 64 64"
+                    >
+                      <path
+                        d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
 
-          {/* Quick Links */}
-          <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-bold">Quick Links</h2>
-            {["Privacy Policy", "Terms & Conditions", "FAQ", "Contact Us"].map(
-              (item) => (
-                <a
-                  href="#"
-                  key={item}
-                  className="hover:underline text-sm text-gray-300"
-                >
-                  {item}
-                </a>
-              )
-            )}
-          </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 cursor-pointer fill-slate-400 hover:fill-red-600 inline-block"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z"
+                        data-original="#000000"
+                      ></path>
+                      <path
+                        d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-3 mt-auto">
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-[18px] h-[18px] cursor-pointer bg-slate-400 outline-none rounded-full"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-2 fill-white"
+                        viewBox="0 0 124 124"
+                      >
+                        <path
+                          d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
+                          data-original="#000000"
+                        ></path>
+                      </svg>
+                    </button>
+                    <span className="font-semibold text-base leading-[18px]">
+                      2
+                    </span>
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-[18px] h-[18px] cursor-pointer bg-slate-800 outline-none rounded-full"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-2 fill-white"
+                        viewBox="0 0 42 42"
+                      >
+                        <path
+                          d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
+                          data-original="#000000"
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-          {/* App Download */}
-          <div className="flex flex-col gap-3">
-            <h2 className="text-2xl font-bold">Download App</h2>
-            <p className="text-sm text-gray-400">
-              Get our app for the best experience
-            </p>
-            <div className="flex gap-3">
-              <Image
-                src="/QrCode.png"
-                alt="QR Code"
-                width={80}
-                height={80}
-                className="cursor-pointer"
-              />
-              <div className="flex flex-col gap-2">
-                <Image
-                  src="/playStore.png"
-                  alt="Play Store"
-                  width={120}
-                  height={40}
-                  className="cursor-pointer"
-                />
-                <Image
-                  src="/appStore.png"
-                  alt="App Store"
-                  width={120}
-                  height={40}
-                  className="cursor-pointer"
-                />
+              <div className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-sm border border-gray-200">
+                <div className="flex gap-6 sm:gap-4 max-sm:flex-col">
+                  <div className="w-24 h-24 max-sm:w-24 max-sm:h-24 shrink-0">
+                    <img
+                      src="https://readymadeui.com/images/watch5.webp"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">
+                        Stylish Smart Watch
+                      </h3>
+                      <p className="text-[13px] font-medium text-slate-500 mt-2 flex items-center gap-2">
+                        Color:{" "}
+                        <span className="inline-block w-4 h-4 rounded-sm bg-[#e8dcdc]"></span>
+                      </p>
+                    </div>
+                    <div className="mt-auto">
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        $70.00
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="ml-auto flex flex-col">
+                  <div className="flex items-start gap-4 justify-end">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 cursor-pointer fill-slate-400 hover:fill-pink-600 inline-block"
+                      viewBox="0 0 64 64"
+                    >
+                      <path
+                        d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 cursor-pointer fill-slate-400 hover:fill-red-600 inline-block"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z"
+                        data-original="#000000"
+                      ></path>
+                      <path
+                        d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-3 mt-auto">
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-[18px] h-[18px] cursor-pointer bg-slate-400 outline-none rounded-full"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-2 fill-white"
+                        viewBox="0 0 124 124"
+                      >
+                        <path
+                          d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
+                          data-original="#000000"
+                        ></path>
+                      </svg>
+                    </button>
+                    <span className="font-semibold text-base leading-[18px]">
+                      1
+                    </span>
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-[18px] h-[18px] cursor-pointer bg-slate-800 outline-none rounded-full"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-2 fill-white"
+                        viewBox="0 0 42 42"
+                      >
+                        <path
+                          d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
+                          data-original="#000000"
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-sm border border-gray-200">
+                <div className="flex gap-6 sm:gap-4 max-sm:flex-col">
+                  <div className="w-24 h-24 max-sm:w-24 max-sm:h-24 shrink-0">
+                    <img
+                      src="https://readymadeui.com/images/sunglass6.webp"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">
+                        Round Glass
+                      </h3>
+                      <p className="text-[13px] font-medium text-slate-500 mt-2 flex items-center gap-2">
+                        Color:{" "}
+                        <span className="inline-block w-4 h-4 rounded-sm bg-black"></span>
+                      </p>
+                    </div>
+                    <div className="mt-auto">
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        $20.00
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="ml-auto flex flex-col">
+                  <div className="flex items-start gap-4 justify-end">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 cursor-pointer fill-slate-400 hover:fill-pink-600 inline-block"
+                      viewBox="0 0 64 64"
+                    >
+                      <path
+                        d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 cursor-pointer fill-slate-400 hover:fill-red-600 inline-block"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z"
+                        data-original="#000000"
+                      ></path>
+                      <path
+                        d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-3 mt-auto">
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-[18px] h-[18px] cursor-pointer bg-slate-400 outline-none rounded-full"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-2 fill-white"
+                        viewBox="0 0 124 124"
+                      >
+                        <path
+                          d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
+                          data-original="#000000"
+                        ></path>
+                      </svg>
+                    </button>
+                    <span className="font-semibold text-base leading-[18px]">
+                      1
+                    </span>
+                    <button
+                      type="button"
+                      className="flex items-center justify-center w-[18px] h-[18px] cursor-pointer bg-slate-800 outline-none rounded-full"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-2 fill-white"
+                        viewBox="0 0 42 42"
+                      >
+                        <path
+                          d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
+                          data-original="#000000"
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-4 mt-4">
-              {/* 👉 Add your SVG social icons inside these <a> tags */}
-              <a href="#" className="text-white hover:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="44"
-                  height="44"
-                  fill="currentColor"
-                  className="text-white hover:text-gray-400 transition-colors duration-300"
-                  viewBox="0 0 256 256"
+            <div className="bg-white rounded-md px-4 py-6 h-max shadow-sm border border-gray-200">
+              <ul className="text-slate-500 font-medium space-y-4">
+                <li className="flex flex-wrap gap-4 text-sm">
+                  Subtotal{" "}
+                  <span className="ml-auto font-semibold text-slate-900">
+                    $200.00
+                  </span>
+                </li>
+                <li className="flex flex-wrap gap-4 text-sm">
+                  Shipping{" "}
+                  <span className="ml-auto font-semibold text-slate-900">
+                    $2.00
+                  </span>
+                </li>
+                <li className="flex flex-wrap gap-4 text-sm">
+                  Tax{" "}
+                  <span className="ml-auto font-semibold text-slate-900">
+                    $4.00
+                  </span>
+                </li>
+                <hr className="border-slate-300" />
+                <li className="flex flex-wrap gap-4 text-sm font-semibold text-slate-900">
+                  Total <span className="ml-auto">$206.00</span>
+                </li>
+              </ul>
+              <div className="mt-8 space-y-4">
+                <button
+                  type="button"
+                  className="text-sm px-4 py-2.5 w-full font-medium tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md cursor-pointer"
                 >
-                  <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,191.63V152h24a8,8,0,0,0,0-16H136V112a16,16,0,0,1,16-16h16a8,8,0,0,0,0-16H152a32,32,0,0,0-32,32v24H96a8,8,0,0,0,0,16h24v63.63a88,88,0,1,1,16,0Z"></path>
-                </svg>
-              </a>
-              <a href="#" className="text-white hover:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="41"
-                  height="41"
-                  fill="currentColor"
-                  className="text-white hover:text-gray-400 transition-colors duration-300"
-                  viewBox="0 0 256 256"
+                  Buy Now
+                </button>
+                <button
+                  type="button"
+                  className="text-sm px-4 py-2.5 w-full font-medium tracking-wide bg-slate-50 hover:bg-slate-100 text-slate-900 border border-gray-300 rounded-md cursor-pointer"
                 >
-                  <path d="M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.3l62.6,98.37-61.77,68a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z"></path>
-                </svg>
-              </a>
-              <a href="#" className="text-white hover:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="42"
-                  height="42"
-                  fill="currentColor"
-                  className="text-white hover:text-gray-400 transition-colors duration-300"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path>
-                </svg>
-              </a>
-              <a href="#" className="text-white hover:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="42"
-                  height="42"
-                  fill="currentColor"
-                  className="text-white hover:text-gray-400 transition-colors duration-300"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"></path>
-                </svg>
-              </a>
+                  Continue Shopping
+                </button>
+              </div>
+              <div className="mt-5 flex flex-wrap justify-center gap-4">
+                <img
+                  src="https://readymadeui.com/images/master.webp"
+                  alt="card1"
+                  className="w-10 object-contain"
+                />
+                <img
+                  src="https://readymadeui.com/images/visa.webp"
+                  alt="card2"
+                  className="w-10 object-contain"
+                />
+                <img
+                  src="https://readymadeui.com/images/american-express.webp"
+                  alt="card3"
+                  className="w-10 object-contain"
+                />
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Divider */}
-        <div className="border-t border-gray-800 mt-10"></div>
-
-        {/* Bottom Copyright */}
-        <p className="text-center text-sm text-gray-500 mt-4">
-          © {new Date().getFullYear()} YnadimeShop. All rights reserved.
-        </p>
       </div>
-    </footer>
+    </>
   );
 }

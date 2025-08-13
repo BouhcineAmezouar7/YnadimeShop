@@ -49,7 +49,14 @@ export default function MenuModal({ isOpen, toggleMenu }: MenuModalProps) {
         </div>
 
         <nav className="flex flex-col gap-4 p-6 text-gray-800">
-          {["Home", "About", "Contact", "Signup"].map((item) => (
+          <Link
+            href="/"
+            onClick={toggleMenu}
+            className="text-base hover:text-blue-600 "
+          >
+            Home
+          </Link>
+          {["About", "Contact", "Signup"].map((item) => (
             <Link
               key={item}
               href={`/${item.toLowerCase()}`}
@@ -105,6 +112,19 @@ export default function MenuModal({ isOpen, toggleMenu }: MenuModalProps) {
               </svg>
               Store
             </button>
+          </div>
+          <div className="flex items-center justify-center w-full mt-5">
+            {/* card */}
+            <Link
+              href="/card"
+              onClick={toggleMenu}
+              className="flex items-center w-full px-4 bg-gray-100 rounded-md hover:bg-gray-200"
+            >
+              <button className="flex items-center gap-2 w-full px-30 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
+                <ShoppingBagIcon className="w-5 h-5" />
+                Cart
+              </button>
+            </Link>
           </div>
         </nav>
       </div>

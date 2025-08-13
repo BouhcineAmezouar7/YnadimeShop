@@ -37,7 +37,7 @@ export default function DayOffer() {
         <div className="hidden items-center gap-2 pt-7 md:flex lg:flex">
           <div>
             {/* view all */}
-            <Link href="#" className="text-[#DB4444] text-sm font-bold mt-4 flex items-center gap-1">
+            <Link href="/productDetails" className="text-[#DB4444] text-sm font-bold mt-4 flex items-center gap-1">
               View All
               <svg
                 xmlns="http://www.w3.org/2000/svg"
