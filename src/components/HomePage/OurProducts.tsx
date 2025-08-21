@@ -184,6 +184,16 @@ export default function OurProducts() {
           </div>
         ))}
       </div>
+      <div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-10 flex justify-center">
+          <Link
+            href="#"
+            className="bg-[#DB4444] mt-5 text-white px-14 py-4 rounded-md text-sm font-semibold hover:bg-red-600 transition duration-300"
+          >
+            Show More Products
+          </Link>
+        </div>
+      </div>
     </>
   );
 }

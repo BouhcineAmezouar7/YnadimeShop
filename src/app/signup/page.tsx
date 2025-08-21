@@ -1,11 +1,96 @@
-'use client';
+"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { count } from "console";
 
 export default function SignupPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    last_name: "",
+    email: "",
+    address: "",
+    country: "",
+    city: "",
+    phone_number: "",
+    postal_code: "",
+    password: "",
+    password_confirmation: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const router = useRouter();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    // Clear error when user types
+    if (error) setError("");
+    if (success) setSuccess("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+
+    // Client-side validation
+    if (formData.password !== formData.password_confirmation) {
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess("Account created successfully! Redirecting to login...");
+        // Redirect to login page after successful signup
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      } else {
+        // Handle validation errors from Laravel
+        if (data.errors) {
+          const errorMessages = Object.values(data.errors).flat().join(", ");
+          setError(errorMessages);
+        } else {
+          setError(data.message || "Signup failed");
+        }
+      }
+    } catch (error) {
+      setError("Network error. Please try again.");
+      console.error("Signup error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="container mx-auto px-5 py-10">
+    <div className="container mx-auto px-5 py-5">
       <div className="flex flex-col lg:flex-row items-center justify-center gap-10">
         {/* Image */}
         <div className="w-full lg:w-1/2 flex justify-center">
@@ -20,7 +105,10 @@ export default function SignupPage() {
 
         {/* Signup Form */}
         <div className="w-full lg:w-1/2">
-          <form className="flex flex-col gap-8 w-full max-w-md mx-auto p-6 md:p-10">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-6 md:p-10"
+          >
             {/* Heading */}
             <div className="flex flex-col gap-3 text-center lg:text-left">
               <h1 className="text-3xl md:text-4xl text-gray-800 font-semibold">
@@ -31,30 +119,128 @@ export default function SignupPage() {
               </p>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
+
+            {/* Success Message */}
+            {success && (
+              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                {success}
+              </div>
+            )}
+
             {/* Input Fields */}
-            <input
-              type="text"
-              placeholder="Name"
-              className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
-            />
+            {/* name and last_name */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleInputChange}
+                required
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+            </div>
+            {/* email */}
+            <div>
+              <input
+                type="email"
+                placeholder="Email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+            </div>
+            {/* phone_number and postal_code  */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Phone Number"
+                name="phone_number"
+                value={formData.phone_number}
+                onChange={handleInputChange}
+                required
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+              <input
+                type="text"
+                placeholder="Postal Code"
+                name="postal_code"
+                value={formData.postal_code}
+                onChange={handleInputChange}
+                required
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+            </div>
+            {/* adress and city */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Address"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                required
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+              <input
+                type="text"
+                placeholder="City"
+                name="city"
+                value={formData.city}
+                onChange={handleInputChange}
+                required
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+            </div>
+            {/*  */}
+            {/* password and Confirm Password */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                minLength={8}
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                name="password_confirmation"
+                value={formData.password_confirmation}
+                onChange={handleInputChange}
+                required
+                className="border-b-2 font-serif w-full border-neutral-300 p-3 focus:outline-none focus:border-[#DB4444]"
+              />
+            </div>
 
             {/* Create Account Button */}
-            <Link
-              href="#"
-              className="bg-[#DB4444] text-white text-center px-6 py-3 rounded-sm font-semibold hover:bg-red-600 transition-colors duration-300"
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-[#DB4444] text-white text-center px-6 py-3 rounded-sm font-semibold hover:bg-red-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
-            </Link>
+              {isLoading ? "Creating Account..." : "Create Account"}
+            </button>
 
             {/* Google Sign-In */}
             <Link

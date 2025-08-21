@@ -1,7 +1,49 @@
+"use client";
 import Link from "next/link";
 import React from "react";
+import { useState,  useEffect} from "react";
 
 export default function DayOffer() {
+  // count days, hours, minutes, seconds
+  const [time, setTime] = useState({
+    days: 19,
+    hours: 23,
+    minutes: 44,
+    seconds: 11,
+  });
+
+  // useEffect to update the countdown every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime((prev) => {
+        let { days, hours, minutes, seconds } = prev;
+
+        if (seconds > 0) {
+          seconds -= 1;
+        } else if (minutes > 0) {
+          minutes -= 1;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours -= 1;
+          minutes = 59;
+          seconds = 59;
+        } else if (days > 0) {
+          days -= 1;
+          hours = 23;
+          minutes = 59;
+          seconds = 59;
+        } else {
+          clearInterval(interval);
+        }
+
+        return { days, hours, minutes, seconds };
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+  
+
   return (
     <>
       {/* Today's Offer Section */}
@@ -23,13 +65,10 @@ export default function DayOffer() {
                 <h2>Seconds</h2>
               </div>
               <div className="flex lg:gap-5 gap-2 pt-2 text-2xl lg:text-4xl font-bold">
-                <h2>12</h2>
-                <h2>:</h2>
-                <h2>24</h2>
-                <h2>:</h2>
-                <h2>36</h2>
-                <h2>:</h2>
-                <h2>48</h2>
+                <h2>{time.days}</h2>:
+                <h2>{time.hours}</h2>:
+                <h2>{time.minutes}</h2>:
+                <h2>{time.seconds}</h2>
               </div>
             </div>
           </div>

@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "axios": "^1.11.0",
     "embla-carousel-react": "^8.6.0",
+    "localtunnel": "^2.0.2",
     "next": "15.4.2",
+    "ngrok": "^5.0.0-beta.2",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
