@@ -3,8 +3,7 @@ import Image from "next/image";
 import PlusServices from "@/components/HomePage/PlusServices";
 import TeamSection from "@/components/About/TeamSection";
 import StatusSection from "@/components/About/StatusSection";
-
-
+import Link from "next/link";
 
 export default function page() {
   return (
@@ -12,7 +11,9 @@ export default function page() {
       <div className="container mx-auto px-5 ">
         {/* Breadcrumb */}
         <h2 className="flex items-center gap-2 text-gray-700 font-semibold mb-8 text-sm md:text-base py-10">
-          <span className="text-neutral-400">Home</span>
+          <span className="text-neutral-400">
+            <Link href="/">Home</Link>
+          </span>
           <span className="text-neutral-400">/</span>
           <span>About</span>
         </h2>

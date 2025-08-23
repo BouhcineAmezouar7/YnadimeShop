@@ -71,12 +71,12 @@ export default function CartPage() {
       <div className="container mx-auto px-5 py-15 ">
         {/* Breadcrumb */}
         <h2 className="flex items-center gap-2 text-gray-700 font-semibold mb-8 text-sm md:text-base">
-          <span className="text-neutral-400">Home</span>
+          <span className="text-neutral-400"><Link href="/">Home</Link></span>
           <span className="text-neutral-400">/</span>
-          <span>Shopping Cart</span>
+          <span>Cart</span>
         </h2>
 
-        <div className="max-w-6xl max-lg:max-w-2xl mx-auto p-4 m-10">
+        <div className="max-lg:max-w-2xl mx-auto p-4">
           <div className="grid lg:grid-cols-3 lg:gap-x-8 gap-x-6 gap-y-8 mt-6">
             <div className="lg:col-span-2 space-y-6">
               {cartItems.map((item) => (
