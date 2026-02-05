@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const OurProductsData = [
   {
@@ -91,17 +92,20 @@ const OurProductsData = [
       "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-03.jpg",
   },
 ];
-export default function OurProducts() {
-  const StarIcon = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-      viewBox="0 0 20 20"
-      className="h-4 w-4 text-yellow-500"
-    >
-      <path d="M10 15.27L16.18 19l-1.64-7.03L20 7.24l-7.19-.61L10 0 7.19 6.63 0 7.24l5.46 4.73L3.82 19z" />
-    </svg>
-  );
+
+const StarIcon = React.memo(() => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    className="h-4 w-4 text-yellow-500"
+  >
+    <path d="M10 15.27L16.18 19l-1.64-7.03L20 7.24l-7.19-.61L10 0 7.19 6.63 0 7.24l5.46 4.73L3.82 19z" />
+  </svg>
+));
+StarIcon.displayName = 'StarIcon';
+
+const OurProducts = React.memo(function OurProducts() {
   return (
     <>
       <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-10">
@@ -149,10 +153,13 @@ export default function OurProducts() {
           >
             <div className="relative flex h-full flex-col justify-between rounded-lg bg-gray-50 p-4">
               <Link href="#" className="relative mx-3 mt-3 flex h-60">
-                <img
-                  className="absolute inset-0 h-full w-full object-cover"
+                <Image
+                  className="object-cover"
                   src={product.imageUrl}
                   alt={product.name}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  priority={product.id <= 2}
                 />
               </Link>
               <span className="absolute top-0 left-0 m-3 rounded-sm bg-[#DB4444] px-4 py-1 text-center text-sm font-medium text-white">
@@ -199,4 +206,6 @@ export default function OurProducts() {
       </div>
     </>
   );
-}
+});
+
+export default OurProducts;

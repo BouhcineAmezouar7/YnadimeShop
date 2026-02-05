@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Footer() {
+const Footer = React.memo(function Footer() {
   return (
     <footer className="bg-black text-white py-6">
       <div className="container mx-auto px-4 space-y-10 m-3">
@@ -171,4 +171,6 @@ export default function Footer() {
         </p>
     </footer>
   );
-}
+});
+
+export default Footer;

@@ -10,7 +10,7 @@ import Featured from "./Featured";
 import OurProducts from "./OurProducts";
 import Footer from "../Footer";
 
-export default function Content() {
+const Content = React.memo(function Content() {
   return (
     <>
       <div className="container mx-auto px-4">
@@ -28,4 +28,6 @@ export default function Content() {
       </div>
     </>
   );
-}
+});
+
+export default Content;

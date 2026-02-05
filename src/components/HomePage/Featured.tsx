@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-export default function Featured() {
+const Featured = React.memo(function Featured() {
   return (
     <>
       <div className="container mx-auto px-4 sm:px-6 lg:px-0 mt-10 mb-10 py-10">
@@ -130,4 +130,6 @@ export default function Featured() {
       </div>
     </>
   );
-}
+});
+
+export default Featured;

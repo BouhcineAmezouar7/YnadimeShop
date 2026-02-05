@@ -133,7 +133,8 @@ const CategoriesData = [
     ),
   },
 ];
-export default function Categories() {
+
+const Categories = React.memo(function Categories() {
   return (
     <>
       <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-10">
@@ -169,4 +170,6 @@ export default function Categories() {
       </div>
     </>
   );
-}
+});
+
+

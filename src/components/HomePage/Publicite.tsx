@@ -8,7 +8,7 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
-export default function Publicite() {
+const Publicite = React.memo(function Publicite() {
   return (
     <div
       className={`${montserrat.className} my-16 flex lg:flex-row flex-col container mx-auto bg-black rounded-lg`}
@@ -63,4 +63,6 @@ export default function Publicite() {
       </div>
     </div>
   );
-}
+});
+
+export default Publicite;

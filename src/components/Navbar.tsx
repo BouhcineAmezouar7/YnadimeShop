@@ -1,5 +1,5 @@
 "use client";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import TopNav from "./TopNav";
@@ -21,9 +21,9 @@ export default function Navbar() {
     setIsLoggedIn(auth.isAuthenticated());
   }, []);
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setIsOpen(!isOpen);
-  };
+  }, [isOpen]);
 
   const pathname = usePathname();
 

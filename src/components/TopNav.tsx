@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-export default function TopNav() {
+const TopNav = React.memo(function TopNav() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -76,4 +76,6 @@ export default function TopNav() {
       </nav>
     </>
   );
-}
+});
+
+export default TopNav;

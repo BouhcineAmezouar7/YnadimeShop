@@ -2,13 +2,14 @@
 "use client";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
+import React from "react";
 
-export default function Carousel() {
+const Carousel = React.memo(function Carousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const slides = [
+  const slides = useMemo(() => [
     {
       src: "/iphone.png",
       text: "Professional Printing Services",
@@ -30,9 +31,9 @@ export default function Carousel() {
       description:
         "Rush orders and same-day printing options available for urgent needs.",
     },
-  ];
+  ], []);
 
-  const categories = [
+  const categories = useMemo(() => [
     { name: "Woman's Fashion", icon: "👗", hasSubmenu: true },
     { name: "Men's Fashion", icon: "👔", hasSubmenu: true },
     { name: "Electronics", icon: "📱", hasSubmenu: false },
@@ -42,7 +43,7 @@ export default function Carousel() {
     { name: "Baby's & Toys", icon: "🧸", hasSubmenu: false },
     { name: "Groceries & Pets", icon: "🛒", hasSubmenu: false },
     { name: "Health & Beauty", icon: "💄", hasSubmenu: false },
-  ];
+  ], []);
 
   // Track the current slide index
   useEffect(() => {
@@ -262,4 +263,6 @@ export default function Carousel() {
       </div>
     </>
   );
-}
+});
+
+export default Carousel;

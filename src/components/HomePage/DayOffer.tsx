@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { useState,  useEffect} from "react";
 
-export default function DayOffer() {
+const DayOffer = React.memo(function DayOffer() {
   // count days, hours, minutes, seconds
   const [time, setTime] = useState({
     days: 19,
@@ -98,4 +98,6 @@ export default function DayOffer() {
       </div>
     </>
   );
-}
+});
+
+export default DayOffer;

@@ -53,7 +53,8 @@ const Services = [
     description: "We return money within 30 days if you are not satisfied.",
   },
 ];
-export default function PlusServices() {
+
+const PlusServices = React.memo(function PlusServices() {
   return (
     <>
       <div className="container mx-auto px-4 py-19 mb-10">
@@ -75,4 +76,6 @@ export default function PlusServices() {
       </div>
     </>
   );
-}
+});
+
+export default PlusServices;
