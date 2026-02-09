@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { count } from "console";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({

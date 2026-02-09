@@ -6,7 +6,7 @@ import ProfileSidebar from "@/components/Profile/ProfileSidebar";
 import ProfileForm from "@/components/Profile/ProfileForm";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ name: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

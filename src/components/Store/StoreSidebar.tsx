@@ -52,7 +52,7 @@ export default function StoreSidebar() {
     setSelectedBrand(brandName);
   };
 
-  const togglePrice = () => {
+  const _togglePrice = () => {
     setIsPriceOpen(!isPriceOpen);
   };
   const handlePriceSelect = (priceRange: string) => {

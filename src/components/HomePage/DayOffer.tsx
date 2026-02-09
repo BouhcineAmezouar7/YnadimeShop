@@ -51,7 +51,7 @@ const DayOffer = React.memo(function DayOffer() {
         <div>
           <div className="container mx-auto flex gap-4 ">
             <div className="bg-[#DB4444] px-2.5 rounded-sm"></div>
-            <h2 className="font-bold text-xl text-[#DB4444] py-2">Today's</h2>
+            <h2 className="font-bold text-xl text-[#DB4444] py-2">Today&apos;s</h2>
           </div>
           <div className="container mx-auto flex items-end gap-20">
             <h1 className="lg:text-3xl text-xl font-bold text-black  pt-9">

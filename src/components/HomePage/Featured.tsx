@@ -57,7 +57,7 @@ const Featured = React.memo(function Featured() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
                 <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 text-white">
                   <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-2">
-                    Women's Collection
+                    Women&apos;s Collection
                   </h3>
                   <p className="text-xs sm:text-sm md:text-base lg:text-lg mb-4 opacity-90 font-light">
                     Featured woman collections that

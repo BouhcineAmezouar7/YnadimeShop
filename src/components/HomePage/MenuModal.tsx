@@ -1,9 +1,7 @@
 // components/MenuModal.tsx
 import React from "react";
 import Link from "next/link";
-import {
-  ShoppingBagIcon,
-} from "@heroicons/react/24/outline";
+import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 
 interface MenuModalProps {
   isOpen: boolean;

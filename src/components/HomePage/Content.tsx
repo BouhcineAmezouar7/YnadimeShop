@@ -7,7 +7,6 @@ import Publicite from "./Publicite";
 import PlusServices from "./PlusServices";
 import Featured from "./Featured";
 import OurProducts from "./OurProducts";
-import Footer from "../Footer";
 import Categories from "./Categories";
 
 const Content = React.memo(function Content() {
