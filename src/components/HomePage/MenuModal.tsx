@@ -2,9 +2,6 @@
 import React from "react";
 import Link from "next/link";
 import {
-  XMarkIcon,
-  MagnifyingGlassIcon,
-  HeartIcon,
   ShoppingBagIcon,
 } from "@heroicons/react/24/outline";
 

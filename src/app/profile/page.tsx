@@ -5,7 +5,7 @@ import Link from "next/link";
 import ProfileSidebar from "@/components/Profile/ProfileSidebar";
 import ProfileForm from "@/components/Profile/ProfileForm";
 
-export default function page() {
+export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
