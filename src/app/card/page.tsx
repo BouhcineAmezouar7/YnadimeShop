@@ -86,7 +86,7 @@ export default function CartPage() {
                 >
                   <div className="flex gap-6 sm:gap-4 max-sm:flex-col">
                     <div className="w-24 h-24 max-sm:w-24 max-sm:h-24 shrink-0">
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.name}
                         className="w-full h-full object-contain"
@@ -224,17 +224,17 @@ export default function CartPage() {
                 </Link>
               </div>
               <div className="mt-5 flex flex-wrap justify-center gap-4">
-                <img
+                <Image
                   src="/card/mastercard.png"
                   alt="Mastercard"
                   className="w-10 object-contain"
                 />
-                <img
+                <Image
                   src="/card/visa.png"
                   alt="Visa"
                   className="w-10 object-contain"
                 />
-                <img
+                <Image
                   src="/card/american-express.png"
                   alt="American Express"
                   className="w-10 object-contain"

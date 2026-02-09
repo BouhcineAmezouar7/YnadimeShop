@@ -172,4 +172,4 @@ const Categories = React.memo(function Categories() {
   );
 });
 
-
+export default Categories;

@@ -18,7 +18,8 @@ export default function page() {
               <div className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-sm border border-gray-200">
                 <div className="flex gap-6 sm:gap-4 max-sm:flex-col">
                   <div className="w-24 h-24 max-sm:w-24 max-sm:h-24 shrink-0">
-                    <img
+                    <Image
+                      alt=""
                       src="https://readymadeui.com/images/watch1.webp"
                       className="w-full h-full object-contain"
                     />
@@ -110,7 +111,8 @@ export default function page() {
               <div className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-sm border border-gray-200">
                 <div className="flex gap-6 sm:gap-4 max-sm:flex-col">
                   <div className="w-24 h-24 max-sm:w-24 max-sm:h-24 shrink-0">
-                    <img
+                    <Image
+                      alt=""
                       src="https://readymadeui.com/images/watch5.webp"
                       className="w-full h-full object-contain"
                     />
@@ -202,7 +204,8 @@ export default function page() {
               <div className="flex gap-4 bg-white px-4 py-6 rounded-md shadow-sm border border-gray-200">
                 <div className="flex gap-6 sm:gap-4 max-sm:flex-col">
                   <div className="w-24 h-24 max-sm:w-24 max-sm:h-24 shrink-0">
-                    <img
+                    <Image
+                      alt=""
                       src="https://readymadeui.com/images/sunglass6.webp"
                       className="w-full h-full object-contain"
                     />
@@ -332,17 +335,17 @@ export default function page() {
                 </button>
               </div>
               <div className="mt-5 flex flex-wrap justify-center gap-4">
-                <img
+                <Image
                   src="https://readymadeui.com/images/master.webp"
                   alt="card1"
                   className="w-10 object-contain"
                 />
-                <img
+                <Image
                   src="https://readymadeui.com/images/visa.webp"
                   alt="card2"
                   className="w-10 object-contain"
                 />
-                <img
+                <Image
                   src="https://readymadeui.com/images/american-express.webp"
                   alt="card3"
                   className="w-10 object-contain"

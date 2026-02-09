@@ -1,4 +1,3 @@
-// filepath: /media/bamezoua/PMG7/my/my-app/src/components/Carousel.tsx
 "use client";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";

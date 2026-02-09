@@ -2,13 +2,13 @@ import React from "react";
 import Carousel from "./Carousel";
 import DayOffer from "./DayOffer";
 import Card from "./Card";
-import Categories from "./Categories";
 import ThisMonth from "./ThisMonth";
 import Publicite from "./Publicite";
 import PlusServices from "./PlusServices";
 import Featured from "./Featured";
 import OurProducts from "./OurProducts";
 import Footer from "../Footer";
+import Categories from "./Categories";
 
 const Content = React.memo(function Content() {
   return (
@@ -18,7 +18,7 @@ const Content = React.memo(function Content() {
         <DayOffer />
         <Card />
         <div className="container mx-auto border-b border-gray-200 my-8"></div>
-        <Categories />
+        <Categories/>
         <div className="container mx-auto border-b border-gray-200 mb-10 "></div>
         <ThisMonth />
         <Publicite />

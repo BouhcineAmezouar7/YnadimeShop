@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const products = [
   {
@@ -229,7 +230,9 @@ export default function StoreProducts() {
                 href={`/product/${product.id}`}
                 className="relative mx-3 mt-3 flex h-60"
               >
-                <img
+                <Image
+                  width={"600"}
+                  height={"600"}
                   className="absolute inset-0 h-full w-full object-cover rounded-lg"
                   src={product.imageUrl}
                   alt={product.name}

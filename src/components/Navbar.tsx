@@ -49,7 +49,7 @@ export default function Navbar() {
             <Link
               href="/store"
               className={
-                pathname === "/products" ? "underline underline-offset-3" : ""
+                pathname === "/store" ? "underline underline-offset-3" : ""
               }
             >
               Products
