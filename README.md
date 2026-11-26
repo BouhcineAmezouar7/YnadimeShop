@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# YnadimeShop
 
-## Getting Started
+YnadimeShop is a responsive e-commerce storefront built with Next.js and TypeScript. It includes a browsable product catalog, product filtering, favorites, cart and checkout flows, customer accounts, order history, and a lightweight dashboard.
 
-First, run the development server:
+The application currently runs as a front-end demo. Product data is bundled with the project, and user data is saved in the browser with `localStorage`; no database or payment provider is required.
+
+## Features
+
+- Responsive home page with featured products, categories, offers, and promotional sections
+- Product catalog with search, sorting, category, brand, price, color, rating, and availability filters
+- Dynamic product detail pages
+- Persistent favorites and shopping cart
+- Checkout with cash-on-delivery and simulated card payment options
+- Order confirmation, history, and cancellation
+- Local account registration, login, password reset, and profile management
+- Demo customer account for quick testing
+- Store dashboard with catalog and order summaries
+- About, contact, privacy, and terms pages
+
+## Tech stack
+
+- [Next.js 15](https://nextjs.org/) with the App Router
+- [React 19](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS 4](https://tailwindcss.com/)
+- [Heroicons](https://heroicons.com/)
+- [Embla Carousel](https://www.embla-carousel.com/)
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20 or newer
+- npm (included with Node.js)
+
+### Installation
 
 ```bash
+git clone <repository-url>
+cd ynadimeShop
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+The repository also includes a Bun lockfile, so you can use Bun instead:
+
+```bash
+bun install
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Demo account
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+On the login page, select **Continue with demo account**, or use:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+Email: demo@ynadimeshop.com
+Password: demo12345
+```
 
-## Learn More
+The demo account is created in the current browser when it is first used.
 
-To learn more about Next.js, take a look at the following resources:
+## Available scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Run the production build |
+| `npm run lint` | Run the configured Next.js lint command |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+To test the production version locally:
 
-## Deploy on Vercel
+```bash
+npm run build
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Main routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Route | Description |
+| --- | --- |
+| `/` | Storefront home page |
+| `/store` | Searchable and filterable product catalog |
+| `/productDetails/[slug]` | Product details |
+| `/favorite` | Saved products |
+| `/card` | Shopping cart |
+| `/checkout` | Delivery and payment form |
+| `/orders` | Customer order history |
+| `/login`, `/signup` | Customer authentication |
+| `/profile` | Customer profile |
+| `/account/[section]` | Addresses, payment options, returns, and cancellations |
+| `/dashboard` | Store dashboard |
+| `/about`, `/contact` | Company information and contact form |
+
+## Project structure
+
+```text
+ynadimeShop/
+├── public/                  # Product images and static assets
+├── src/
+│   ├── app/                 # App Router pages and global styles
+│   ├── components/          # Shared and feature-specific UI components
+│   │   ├── About/
+│   │   ├── Dashboard/
+│   │   ├── HomePage/
+│   │   ├── Profile/
+│   │   └── Store/
+│   ├── data/products.ts     # Product catalog and product types
+│   └── utils/               # Auth, cart, favorites, and order storage helpers
+├── next.config.ts
+├── package.json
+└── tsconfig.json
+```
+
+## Data persistence
+
+This project does not currently send customer or order data to a server. The following data is stored in the browser:
+
+- Registered accounts and the active session
+- Cart and favorite products
+- Orders and their status
+- Profile, address, and demo payment details
+- Contact form submissions
+
+Because the data is browser-local, it is specific to the current browser and origin. Clearing site data removes it. Authentication and payments are simulations and must be replaced with secure server-side implementations before using this project in production.
+
+## Product catalog
+
+Products are defined in [`src/data/products.ts`](src/data/products.ts), while their images live under [`public/product`](public/product). Add or edit catalog entries there to update the storefront and dashboard.
+
+Each product includes its category, brand, colors, price, rating, stock state, image, available sizes, features, and specifications.
+
+## Deployment
+
+The app can be deployed to any platform that supports Next.js. For Vercel:
+
+1. Push the repository to a Git provider.
+2. Import the repository into [Vercel](https://vercel.com/new).
+3. Keep the default Next.js build settings and deploy.
+
+No environment variables are required for the current front-end demo.
