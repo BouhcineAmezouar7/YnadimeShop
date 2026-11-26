@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -19,7 +20,6 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { auth } from "@/utils/auth";
-import { montserrat } from "@/app/fonts";
 
 interface MenuModalProps {
   isOpen: boolean;
@@ -198,10 +198,17 @@ export default function MenuModal({
               href="/"
               onClick={toggleMenu}
               id="mobile-menu-title"
-              className={`${montserrat.className} text-xl font-bold tracking-tight text-neutral-950`}
+              aria-label="YnadimeShop home"
+              className="block"
             >
-              YnadimeShop
-              <span className="text-[#DB4444]">.</span>
+              <Image
+                src="/full_logo.png"
+                alt="YnadimeShop"
+                width={2172}
+                height={724}
+                sizes="180px"
+                className="h-auto w-[180px]"
+              />
             </Link>
 
             <p className="mt-2 text-xs text-neutral-500">

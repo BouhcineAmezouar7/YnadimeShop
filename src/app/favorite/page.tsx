@@ -6,6 +6,7 @@ import { montserrat } from "@/app/fonts";
 import ProductCard from "@/components/HomePage/ProductCard";
 import { products, type Product } from "@/data/products";
 import {
+  clearFavorites,
   FAVORITES_UPDATED_EVENT,
   getStoredFavorites,
   type FavoriteProduct,
@@ -36,6 +37,12 @@ export default function FavoritePage() {
       window.removeEventListener("storage", updateFavorites);
     };
   }, []);
+
+  function handleClearFavorites() {
+    if (window.confirm("Remove all products from your favorites?")) {
+      clearFavorites();
+    }
+  }
 
   return (
     <main className="container mx-auto min-h-[65vh] px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-24">
@@ -103,10 +110,34 @@ export default function FavoritePage() {
         </h2>
 
         {!isLoading && (
-          <span aria-live="polite" className="text-sm text-neutral-500">
-            {favoriteProducts.length}{" "}
-            {favoriteProducts.length === 1 ? "product" : "products"}
-          </span>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <span aria-live="polite" className="text-sm text-neutral-500">
+              {favoriteProducts.length}{" "}
+              {favoriteProducts.length === 1 ? "product" : "products"}
+            </span>
+
+            {favoriteProducts.length > 0 && (
+              <button
+                type="button"
+                onClick={handleClearFavorites}
+                className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-[#DB4444] transition-colors hover:border-[#DB4444] hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DB4444]"
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-4"
+                >
+                  <path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 10v7M14 10v7" />
+                </svg>
+                Clear favorites
+              </button>
+            )}
+          </div>
         )}
       </div>
 

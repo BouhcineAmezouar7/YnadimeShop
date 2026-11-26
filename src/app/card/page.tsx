@@ -6,6 +6,7 @@ import Link from "next/link";
 import { montserrat } from "@/app/fonts";
 import { formatPrice } from "@/data/products";
 import {
+  clearCart,
   getStoredCart,
   saveStoredCart,
   type StoredCartItem,
@@ -78,6 +79,13 @@ export default function CartPage() {
 
   function removeItem(id: string) {
     updateCartItems((items) => items.filter((item) => item.id !== id));
+  }
+
+  function handleClearCart() {
+    if (window.confirm("Remove all products from your cart?")) {
+      clearCart();
+      setCartItems([]);
+    }
   }
 
   function handleFavorite(item: StoredCartItem) {
@@ -181,10 +189,32 @@ export default function CartPage() {
                 Your items
               </h2>
 
-              <span className="text-sm text-neutral-500">
-                {cartItems.length}{" "}
-                {cartItems.length === 1 ? "product" : "products"}
-              </span>
+              <div className="flex items-center gap-3 sm:gap-4">
+                <span className="text-sm text-neutral-500">
+                  {cartItems.length}{" "}
+                  {cartItems.length === 1 ? "product" : "products"}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={handleClearCart}
+                  className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-[#DB4444] transition-colors hover:border-[#DB4444] hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DB4444]"
+                >
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="size-4"
+                  >
+                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 10v7M14 10v7" />
+                  </svg>
+                  Clear cart
+                </button>
+              </div>
             </div>
 
             <div className="space-y-4">

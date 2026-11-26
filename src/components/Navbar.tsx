@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { montserrat } from "@/app/fonts";
 import TopNav from "./TopNav";
 import MenuModal from "./HomePage/MenuModal";
 import { usePathname, useRouter } from "next/navigation";
@@ -172,16 +172,18 @@ export default function Navbar() {
         >
           <Link
             href="/"
-            className="flex shrink-0 items-center gap-2 text-neutral-950"
+            aria-label="YnadimeShop home"
+            className="flex shrink-0 items-center"
           >
-            <span className="text-[#DB4444]">
-              <NavIcon name="bag" />
-            </span>
-            <span
-              className={`${montserrat.className} text-lg font-bold tracking-tight sm:text-xl`}
-            >
-              YnadimeShop
-            </span>
+            <Image
+              src="/full_logo.png"
+              alt="YnadimeShop"
+              width={2172}
+              height={724}
+              priority
+              sizes="(min-width: 640px) 200px, 150px"
+              className="h-auto w-[150px] sm:w-[200px]"
+            />
           </Link>
           <div className="hidden h-[72px] items-center gap-6 xl:flex">
             {links.map(({ label, href }) => (

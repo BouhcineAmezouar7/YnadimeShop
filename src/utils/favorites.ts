@@ -48,3 +48,7 @@ export function toggleFavorite(product: FavoriteProduct) {
 export function removeFavorite(id: string) {
   saveFavorites(getStoredFavorites().filter((product) => product.id !== id));
 }
+
+export function clearFavorites() {
+  saveFavorites([]);
+}
