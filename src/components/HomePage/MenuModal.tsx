@@ -1,127 +1,415 @@
-// components/MenuModal.tsx
-import React from "react";
+"use client";
+
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  HomeIcon,
+  Squares2X2Icon,
+  InformationCircleIcon,
+  ChatBubbleLeftRightIcon,
+  ShoppingBagIcon,
+  HeartIcon,
+  UserCircleIcon,
+  MagnifyingGlassIcon,
+  ChevronRightIcon,
+  XMarkIcon,
+  ArrowRightStartOnRectangleIcon,
+  ClipboardDocumentListIcon,
+} from "@heroicons/react/24/outline";
+
+import { auth } from "@/utils/auth";
+import { montserrat } from "@/app/fonts";
 
 interface MenuModalProps {
   isOpen: boolean;
   toggleMenu: () => void;
+  cartCount: number;
+  favoriteCount: number;
+  isLoggedIn: boolean;
 }
 
-export default function MenuModal({ isOpen, toggleMenu }: MenuModalProps) {
+const navigation = [
+  {
+    label: "Home",
+    href: "/",
+    icon: HomeIcon,
+  },
+  {
+    label: "Shop all products",
+    href: "/store",
+    icon: Squares2X2Icon,
+  },
+  {
+    label: "About us",
+    href: "/about",
+    icon: InformationCircleIcon,
+  },
+  {
+    label: "Contact",
+    href: "/contact",
+    icon: ChatBubbleLeftRightIcon,
+  },
+];
+
+export default function MenuModal({
+  isOpen,
+  toggleMenu,
+  cartCount,
+  favoriteCount,
+  isLoggedIn,
+}: MenuModalProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const [search, setSearch] = useState("");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [error, setError] = useState("");
+
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const closeMenuRef = useRef(toggleMenu);
+
+  useEffect(() => {
+    closeMenuRef.current = toggleMenu;
+  }, [toggleMenu]);
+
+  /* Scroll lock, keyboard navigation and focus management */
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement as HTMLElement | null;
+
+    document.body.style.overflow = "hidden";
+
+    closeButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        closeMenuRef.current();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const elements = drawerRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex="0"]',
+      );
+
+      if (!elements?.length) return;
+
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+
+      document.removeEventListener("keydown", handleKeyDown);
+
+      previousFocus?.focus();
+    };
+  }, [isOpen]);
+
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const query = search.trim();
+
+    router.push(
+      query ? `/store?search=${encodeURIComponent(query)}` : "/store",
+    );
+
+    setSearch("");
+    toggleMenu();
+  }
+
+  async function handleLogout() {
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+    setError("");
+
+    try {
+      await auth.logout();
+
+      toggleMenu();
+      window.location.assign("/");
+    } catch {
+      setError("Unable to sign out. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  }
+
+  const shoppingLinks = [
+    {
+      label: "Wishlist",
+      href: "/favorite",
+      icon: HeartIcon,
+      count: favoriteCount,
+    },
+    {
+      label: "My cart",
+      href: "/card",
+      icon: ShoppingBagIcon,
+      count: cartCount,
+    },
+  ];
+
   return (
     <>
-      {/* Overlay */}
+      {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300 ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        aria-hidden="true"
+        onClick={isOpen ? toggleMenu : undefined}
+        className={`fixed inset-0 z-[100] bg-black/45 backdrop-blur-[2px] transition-opacity duration-300 motion-reduce:transition-none ${
+          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
-        onClick={toggleMenu}
       />
 
-      {/* Right-Side Drawer */}
+      {/* Navigation drawer */}
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-4/5 max-w-sm bg-white shadow-xl transition-transform duration-300 ease-in-out transform ${
-          isOpen ? "translate-x-0" : "translate-x-full"
+        ref={drawerRef}
+        role="dialog"
+        aria-modal={isOpen ? true : undefined}
+        aria-labelledby="mobile-menu-title"
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        className={`fixed inset-y-0 right-0 z-[110] flex h-dvh w-[88%] max-w-[400px] flex-col bg-white transition-transform duration-300 ease-in-out motion-reduce:transition-none ${
+          isOpen ? "translate-x-0" : "pointer-events-none translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold">Menu</h2>
-          <button onClick={toggleMenu} aria-label="Close menu">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-6 h-6"
+        {/* Header */}
+        <header className="flex shrink-0 items-start justify-between gap-4 border-b border-neutral-200 px-6 py-6">
+          <div>
+            <Link
+              href="/"
+              onClick={toggleMenu}
+              id="mobile-menu-title"
+              className={`${montserrat.className} text-xl font-bold tracking-tight text-neutral-950`}
             >
-              <path
-                fillRule="evenodd"
-                d="M6.293 5.293a1 1 0 011.414 0L12 9.586l4.293-4.293a1 1 0 111.414 1.414L13.414 11l4.293 4.293a1 1 0 01-1.414 1.414L12 12.414l-4.293 4.293a1 1 0 01-1.414-1.414L10.586 11l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
+              YnadimeShop
+              <span className="text-[#DB4444]">.</span>
+            </Link>
+
+            <p className="mt-2 text-xs text-neutral-500">
+              Discover something new.
+            </p>
+          </div>
+
+          <button
+            ref={closeButtonRef}
+            type="button"
+            onClick={toggleMenu}
+            aria-label="Close menu"
+            className="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 hover:text-neutral-950"
+          >
+            <XMarkIcon className="size-5" />
           </button>
+        </header>
+
+        {/* Scrollable content */}
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-6">
+          {/* Product search */}
+          <form
+            onSubmit={handleSearch}
+            className="flex min-h-12 items-center gap-3 rounded-lg border border-neutral-200 bg-[#F5F5F5] px-4 transition-colors focus-within:border-[#DB4444]"
+          >
+            <MagnifyingGlassIcon className="size-5 shrink-0 text-neutral-500" />
+
+            <input
+              type="search"
+              name="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search products..."
+              aria-label="Search products"
+              className="min-w-0 flex-1 bg-transparent text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
+            />
+
+            <button
+              type="submit"
+              aria-label="Submit search"
+              className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-neutral-200 hover:text-[#DB4444]"
+            >
+              <ChevronRightIcon className="size-4" />
+            </button>
+          </form>
+
+          {/* Main navigation */}
+          <nav aria-label="Mobile navigation" className="mt-8">
+            <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-neutral-400">
+              Explore
+            </h2>
+
+            <ul className="space-y-1">
+              {navigation.map((item) => {
+                const Icon = item.icon;
+
+                const isActive =
+                  item.href === "/"
+                    ? pathname === "/"
+                    : pathname === item.href ||
+                      pathname.startsWith(`${item.href}/`);
+
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={toggleMenu}
+                      aria-current={isActive ? "page" : undefined}
+                      className={`group flex min-h-12 items-center gap-3 rounded-lg px-3 py-3.5 text-sm transition-colors ${
+                        isActive
+                          ? "bg-[#DB4444]/[0.08] font-semibold text-[#DB4444]"
+                          : "font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950"
+                      }`}
+                    >
+                      <Icon className="size-5 shrink-0" />
+
+                      <span className="flex-1">{item.label}</span>
+
+                      <ChevronRightIcon
+                        className={`size-4 transition-transform group-hover:translate-x-0.5 ${
+                          isActive ? "text-[#DB4444]" : "text-neutral-400"
+                        }`}
+                      />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          {/* Shopping actions */}
+          <section className="mt-7 border-t border-neutral-200 pt-7">
+            <h2 className="mb-4 text-[11px] font-semibold uppercase tracking-widest text-neutral-400">
+              Your shopping
+            </h2>
+
+            <div className="grid grid-cols-2 gap-3">
+              {shoppingLinks.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={toggleMenu}
+                    className="group flex flex-col gap-5 rounded-xl border border-neutral-200 p-4 transition-colors hover:border-[#DB4444] hover:bg-[#DB4444]/[0.03]"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <Icon className="size-6 text-neutral-800 transition-colors group-hover:text-[#DB4444]" />
+
+                      {item.count > 0 && (
+                        <span className="flex min-w-6 items-center justify-center rounded-full bg-[#DB4444]/10 px-2 py-1 text-xs font-semibold tabular-nums text-[#DB4444]">
+                          {item.count}
+                        </span>
+                      )}
+                    </div>
+
+                    <span className="text-sm font-medium text-neutral-900">
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Account navigation */}
+          {isLoggedIn && (
+            <section className="mt-7 border-t border-neutral-200 pt-7">
+              <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-neutral-400">
+                Your account
+              </h2>
+
+              <div className="space-y-1">
+                <Link
+                  href="/profile"
+                  onClick={toggleMenu}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-[#DB4444]"
+                >
+                  <UserCircleIcon className="size-5" />
+
+                  <span className="flex-1">My account</span>
+
+                  <ChevronRightIcon className="size-4 text-neutral-400" />
+                </Link>
+
+                <Link
+                  href="/orders"
+                  onClick={toggleMenu}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-[#DB4444]"
+                >
+                  <ClipboardDocumentListIcon className="size-5" />
+
+                  <span className="flex-1">My orders</span>
+
+                  <ChevronRightIcon className="size-4 text-neutral-400" />
+                </Link>
+              </div>
+            </section>
+          )}
         </div>
 
-        <nav className="flex flex-col gap-4 p-6 text-gray-800">
-          <Link
-            href="/"
-            onClick={toggleMenu}
-            className="text-base hover:text-blue-600 "
-          >
-            Home
-          </Link>
-          {["About", "Contact", "Signup"].map((item) => (
-            <Link
-              key={item}
-              href={`/${item.toLowerCase()}`}
-              onClick={toggleMenu}
-              className="text-base hover:text-blue-600"
+        {/* Bottom account actions */}
+        <footer className="shrink-0 border-t border-neutral-200 bg-white px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-5">
+          {error && (
+            <p
+              role="alert"
+              className="mb-3 rounded-lg bg-red-50 p-3 text-xs text-red-700"
             >
-              {item}
-            </Link>
-          ))}
+              {error}
+            </p>
+          )}
 
-          {/* Search */}
-          <div className="mt-6">
-            <div className="flex items-center border rounded-md overflow-hidden">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="flex-1 px-3 py-2 outline-none"
-              />
-              <button className="p-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="inline-block w-5 h-5 ml-2"
-                >
-                  <path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748ZM12.1779 7.17624C11.4834 7.48982 11 8.18846 11 9C11 10.1046 11.8954 11 13 11C13.8115 11 14.5102 10.5166 14.8238 9.82212C14.9383 10.1945 15 10.59 15 11C15 13.2091 13.2091 15 11 15C8.79086 15 7 13.2091 7 11C7 8.79086 8.79086 7 11 7C11.41 7 11.8055 7.06167 12.1779 7.17624Z"></path>
-                </svg>
-              </button>
+          {isLoggedIn ? (
+            <button
+              type="button"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-[#DB4444]/30 px-5 py-3 text-sm font-semibold text-[#DB4444] transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <ArrowRightStartOnRectangleIcon className="size-5" />
+
+              {isLoggingOut ? "Signing out..." : "Sign out"}
+            </button>
+          ) : (
+            <div className="space-y-3">
+              <Link
+                href="/login"
+                onClick={toggleMenu}
+                className="flex min-h-12 w-full items-center justify-center rounded-lg bg-[#DB4444] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#c33b3b]"
+              >
+                Sign in
+              </Link>
+
+              <Link
+                href="/signup"
+                onClick={toggleMenu}
+                className="flex min-h-12 w-full items-center justify-center rounded-lg border border-neutral-200 px-5 py-3 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-100"
+              >
+                Create an account
+              </Link>
             </div>
-          </div>
+          )}
 
-          {/* Actions */}
-          <div className="flex gap-3 mt-6">
-            <button className="flex items-center gap-2 w-full px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="inline-block w-5 h-5 ml-2"
-              >
-                <path d="M12.001 4.52853C14.35 2.42 17.98 2.49 20.2426 4.75736C22.5053 7.02472 22.583 10.637 20.4786 12.993L11.9999 21.485L3.52138 12.993C1.41705 10.637 1.49571 7.01901 3.75736 4.75736C6.02157 2.49315 9.64519 2.41687 12.001 4.52853ZM18.827 6.1701C17.3279 4.66794 14.9076 4.60701 13.337 6.01687L12.0019 7.21524L10.6661 6.01781C9.09098 4.60597 6.67506 4.66808 5.17157 6.17157C3.68183 7.66131 3.60704 10.0473 4.97993 11.6232L11.9999 18.6543L19.0201 11.6232C20.3935 10.0467 20.319 7.66525 18.827 6.1701Z"></path>
-              </svg>
-              Favorites
-            </button>
-            <button className="flex items-center gap-2 w-full px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="inline-block w-5 h-5 ml-2"
-              >
-                <path d="M4.00488 16V4H2.00488V2H5.00488C5.55717 2 6.00488 2.44772 6.00488 3V15H18.4433L20.4433 7H8.00488V5H21.7241C22.2764 5 22.7241 5.44772 22.7241 6C22.7241 6.08176 22.7141 6.16322 22.6942 6.24254L20.1942 16.2425C20.083 16.6877 19.683 17 19.2241 17H5.00488C4.4526 17 4.00488 16.5523 4.00488 16ZM6.00488 23C4.90031 23 4.00488 22.1046 4.00488 21C4.00488 19.8954 4.90031 19 6.00488 19C7.10945 19 8.00488 19.8954 8.00488 21C8.00488 22.1046 7.10945 23 6.00488 23ZM18.0049 23C16.9003 23 16.0049 22.1046 16.0049 21C16.0049 19.8954 16.9003 19 18.0049 19C19.1095 19 20.0049 19.8954 20.0049 21C20.0049 22.1046 19.1095 23 18.0049 23Z"></path>
-              </svg>
-              Store
-            </button>
-          </div>
-          <div className="flex items-center justify-center w-full mt-5">
-            {/* card */}
-            <Link
-              href="/card"
-              onClick={toggleMenu}
-              className="flex items-center w-full px-4 bg-gray-100 rounded-md hover:bg-gray-200"
-            >
-              <button className="flex items-center gap-2 w-full px-30 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
-                <ShoppingBagIcon className="w-5 h-5" />
-                Cart
-              </button>
-            </Link>
-          </div>
-        </nav>
+          <p className="mt-5 text-center text-[11px] text-neutral-400">
+            YnadimeShop — Shop your way.
+          </p>
+        </footer>
       </div>
     </>
   );

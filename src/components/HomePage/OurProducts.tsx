@@ -1,211 +1,86 @@
-import React from "react";
 import Link from "next/link";
-import Image from "next/image";
+import ProductGrid from "./ProductGrid";
+import { products } from "@/data/products";
+import { montserrat } from "@/app/fonts";
+import ViewAllLink from "./ViewAllLink";
 
-const OurProductsData = [
-  {
-    id: 1,
-    name: "Nike Air MX Super 2500",
-    color: "Red",
-    price: "$449",
-    originalPrice: "$699",
-    discount: "39%",
-    rating: 5.0,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg",
-  },
-  {
-    id: 2,
-    name: "Adidas Running Shoes",
-    color: "Aspen White",
-    price: "$299",
-    originalPrice: "$399",
-    discount: "25%",
-    rating: 4.8,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-02.jpg",
-  },
-  {
-    id: 3,
-    name: "Classic Sneakers",
-    color: "Charcoal",
-    price: "$189",
-    originalPrice: "$250",
-    discount: "24%",
-    rating: 4.6,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-03.jpg",
-  },
-  {
-    id: 4,
-    name: "Sport Shoes",
-    color: "Black",
-    price: "$329",
-    originalPrice: "$450",
-    discount: "27%",
-    rating: 4.9,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-03.jpg",
-  },
-  {
-    id: 5,
-    name: "Nike Air MX Super 2500",
-    color: "Red",
-    price: "$449",
-    originalPrice: "$699",
-    discount: "39%",
-    rating: 5.0,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg",
-  },
-  {
-    id: 6,
-    name: "Adidas Running Shoes",
-    color: "Aspen White",
-    price: "$299",
-    originalPrice: "$399",
-    discount: "25%",
-    rating: 4.8,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-02.jpg",
-  },
-  {
-    id: 7,
-    name: "Classic Sneakers",
-    color: "Charcoal",
-    price: "$189",
-    originalPrice: "$250",
-    discount: "24%",
-    rating: 4.6,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-03.jpg",
-  },
-  {
-    id: 8,
-    name: "Sport Shoes",
-    color: "Black",
-    price: "$329",
-    originalPrice: "$450",
-    discount: "27%",
-    rating: 4.9,
-    imageUrl:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-03.jpg",
-  },
-];
+export default function OurProducts() {
+  const featuredProducts = [
+    ...products
+      .filter((product) => product.category === "Clothing")
+      .slice(0, 2),
 
-const StarIcon = React.memo(() => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-    className="h-4 w-4 text-yellow-500"
-  >
-    <path d="M10 15.27L16.18 19l-1.64-7.03L20 7.24l-7.19-.61L10 0 7.19 6.63 0 7.24l5.46 4.73L3.82 19z" />
-  </svg>
-));
-StarIcon.displayName = 'StarIcon';
+    ...products
+      .filter((product) => product.category === "Accessories")
+      .slice(0, 2),
 
-const OurProducts = React.memo(function OurProducts() {
+    ...products
+      .filter((product) => product.category === "Electronics")
+      .slice(0, 4),
+  ];
+
   return (
-    <>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-10">
-        <div className=" flex gap-4">
-          <div className="bg-[#DB4444] px-2.5 rounded-sm"></div>
-          <h2 className="font-bold text-lg text-[#DB4444] py-2">
-            {" "}
-            Our Products{" "}
-          </h2>
-        </div>
-        <div className="flex justify-between items-center">
-          <h1 className="lg:text-3xl text-xl font-bold text-black  pt-9">
-            Best selling products
-          </h1>
+    <section className="w-full py-12 lg:py-16">
+      {/* Section header */}
+      <div className="container mx-auto mb-8 px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-5">
           <div>
-            {/* view all */}
-            <Link
-              href="#"
-              className="text-[#DB4444] text-sm font-bold mt-4 flex items-center gap-1"
-            >
-              View All
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="size-4 text-[#DB4444] hover:text-gray-500"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-                />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div className="container mx-auto sm:grid lg:grid flex flex-col grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  items-center">
-        {OurProductsData.map((product) => (
-          <div
-            key={product.id}
-            className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg p-3"
-          >
-            <div className="relative flex h-full flex-col justify-between rounded-lg bg-gray-50 p-4">
-              <Link href="#" className="relative mx-3 mt-3 flex h-60">
-                <Image
-                  className="object-cover"
-                  src={product.imageUrl}
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  priority={product.id <= 2}
-                />
-              </Link>
-              <span className="absolute top-0 left-0 m-3 rounded-sm bg-[#DB4444] px-4 py-1 text-center text-sm font-medium text-white">
-                {product.discount}
-              </span>
-            </div>
-            <div className="mt-4 px-5 pb-2">
-              <Link href="#">
-                <h5 className="text-sm font-bold tracking-tight text-slate-900">
-                  {product.name} - {product.color}
-                </h5>
-              </Link>
-              <div className="mt-2 mb-2 flex items-center justify-between">
-                <p>
-                  <span className="text-sm font-bold text-red-500">
-                    {product.price}
-                  </span>
-                  <span className="text-sm text-gray-500 line-through ml-4">
-                    {product.originalPrice}
-                  </span>
-                </p>
-              </div>
-              <div className="flex items-center pb-2">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} />
-                ))}
-                <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
-                  {product.rating}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-0 py-10 flex justify-center">
-          <Link
-            href="#"
-            className="bg-[#DB4444] mt-5 text-white px-14 py-4 rounded-md text-sm font-semibold hover:bg-red-600 transition duration-300"
-          >
-            Show More Products
-          </Link>
-        </div>
-      </div>
-    </>
-  );
-});
+            <span className="text-xs font-semibold uppercase tracking-widest text-[#DB4444]">
+              Our collection
+            </span>
 
-export default OurProducts;
+            <h2
+              className={`${montserrat.className} mt-3 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl`}
+            >
+              Explore our products
+            </h2>
+
+            <p className="mt-2 text-sm leading-relaxed text-neutral-500">
+              Discover everyday essentials, modern technology, and timeless
+              accessories.
+            </p>
+          </div>
+
+          <ViewAllLink
+            href="/store"
+          />
+        </div>
+      </div>
+
+      {/* Product collection */}
+      {featuredProducts.length > 0 ? (
+        <ProductGrid items={featuredProducts} showFavorite />
+      ) : (
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-xl border border-dashed border-neutral-200 py-12 text-center">
+            <p className="text-sm text-neutral-500">
+              No products available at the moment.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Explore collection */}
+      <div className="mt-10 flex justify-center px-4 lg:mt-12">
+        <Link
+          href="/store"
+          className="group inline-flex min-h-12 items-center justify-center gap-4 rounded-lg bg-[#DB4444] px-8 py-3.5 text-sm font-medium text-white transition-colors hover:bg-[#c33b3b]"
+        >
+          Explore all products
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-4 transition-transform group-hover:translate-x-1"
+          >
+            <path d="M4 12h16m-6-6 6 6-6 6" />
+          </svg>
+        </Link>
+      </div>
+    </section>
+  );
+}

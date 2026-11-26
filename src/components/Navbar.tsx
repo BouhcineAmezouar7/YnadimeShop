@@ -1,199 +1,307 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Montserrat } from "next/font/google";
+import { montserrat } from "@/app/fonts";
 import TopNav from "./TopNav";
 import MenuModal from "./HomePage/MenuModal";
-import { usePathname } from "next/navigation";
-import { auth } from "@/utils/auth";
+import { usePathname, useRouter } from "next/navigation";
+import { AUTH_CHANGED_EVENT, auth } from "@/utils/auth";
+import {
+  CART_ITEM_ADDED_EVENT,
+  CART_UPDATED_EVENT,
+  getCartItemCount,
+  getStoredCart,
+  type CartProduct,
+  type StoredCartItem,
+} from "@/utils/cart";
+import {
+  FAVORITES_UPDATED_EVENT,
+  getStoredFavorites,
+  type FavoriteProduct,
+} from "@/utils/favorites";
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-montserrat",
-});
+function NavIcon({
+  name,
+}: {
+  name: "bag" | "search" | "heart" | "cart" | "user" | "menu" | "close";
+}) {
+  const paths = {
+    bag: (
+      <>
+        <path d="M5 7h14l1 14H4L5 7Z" />
+        <path d="M9 9V6a3 3 0 0 1 6 0v3" />
+      </>
+    ),
+    search: (
+      <>
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-4-4" />
+      </>
+    ),
+    heart: (
+      <path d="M20.8 8.6c0 4.2-8.8 9.7-8.8 9.7S3.2 12.8 3.2 8.6a4.6 4.6 0 0 1 8.8-1.9 4.6 4.6 0 0 1 8.8 1.9Z" />
+    ),
+    cart: (
+      <>
+        <path d="M3 4h2l2.5 12h11l2-8H6" />
+        <circle cx="9" cy="20" r="1" />
+        <circle cx="18" cy="20" r="1" />
+      </>
+    ),
+    user: (
+      <>
+        <circle cx="12" cy="8" r="3.5" />
+        <path d="M4.5 21v-2a7.5 7.5 0 0 1 15 0v2" />
+      </>
+    ),
+    menu: <path d="M4 6h16M4 12h16M4 18h16" />,
+    close: <path d="m6 6 12 12M18 6 6 18" />,
+  };
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="size-5 shrink-0"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {paths[name]}
+    </svg>
+  );
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+  const [favoriteCount, setFavoriteCount] = useState(0);
+  const [cartNotice, setCartNotice] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     setIsLoggedIn(auth.isAuthenticated());
+    setCartCount(getCartItemCount());
+    setFavoriteCount(getStoredFavorites().length);
+
+    let noticeTimer: number | undefined;
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
+    const handleCartUpdate = (event: Event) => {
+      const cart = (event as CustomEvent<StoredCartItem[]>).detail;
+      setCartCount(getCartItemCount(cart || getStoredCart()));
+    };
+    const handleProductAdded = (event: Event) => {
+      const { product } = (
+        event as CustomEvent<{ product: CartProduct; quantity: number }>
+      ).detail;
+      setCartNotice(`${product.name} added to cart`);
+      window.clearTimeout(noticeTimer);
+      noticeTimer = window.setTimeout(() => setCartNotice(""), 2600);
+    };
+    const handleFavoritesUpdate = (event: Event) => {
+      const favorites = (event as CustomEvent<FavoriteProduct[]>).detail;
+      setFavoriteCount((favorites || getStoredFavorites()).length);
+    };
+    const handleAuthChange = () => setIsLoggedIn(auth.isAuthenticated());
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener(CART_UPDATED_EVENT, handleCartUpdate);
+    window.addEventListener(CART_ITEM_ADDED_EVENT, handleProductAdded);
+    window.addEventListener(FAVORITES_UPDATED_EVENT, handleFavoritesUpdate);
+    window.addEventListener(AUTH_CHANGED_EVENT, handleAuthChange);
+
+    return () => {
+      window.clearTimeout(noticeTimer);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener(CART_UPDATED_EVENT, handleCartUpdate);
+      window.removeEventListener(CART_ITEM_ADDED_EVENT, handleProductAdded);
+      window.removeEventListener(
+        FAVORITES_UPDATED_EVENT,
+        handleFavoritesUpdate,
+      );
+      window.removeEventListener(AUTH_CHANGED_EVENT, handleAuthChange);
+    };
   }, []);
 
   const toggleMenu = useCallback(() => {
-    setIsOpen(!isOpen);
-  }, [isOpen]);
+    setIsOpen((open) => !open);
+  }, []);
 
   const pathname = usePathname();
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+    const query = searchQuery.trim();
+    router.push(
+      query ? `/store?search=${encodeURIComponent(query)}` : "/store",
+    );
+  };
+
+  const links = [
+    { label: "Home", href: "/" },
+    { label: "Products", href: "/store" },
+    { label: "Contact", href: "/contact" },
+    { label: "About", href: "/about" },
+  ];
+  const active = (href: string) =>
+    href === "/"
+      ? pathname === href
+      : pathname === href || pathname.startsWith(`${href}/`);
+  const iconClass = (href: string) =>
+    `relative inline-flex size-10 shrink-0 items-center justify-center rounded-md transition-colors focus-visible:outline-2 focus-visible:outline-[#DB4444] ${active(href) ? "bg-[#DB4444]/10 text-[#DB4444]" : "text-neutral-800 hover:bg-neutral-100"}`;
+  const countBadge = (count: number) =>
+    count > 0 && (
+      <span className="absolute right-0 top-0 flex min-h-4 min-w-4 items-center justify-center rounded-full bg-[#DB4444] px-1 text-[10px] font-semibold leading-4 text-white ring-2 ring-white">
+        {count > 99 ? "99+" : count}
+      </span>
+    );
 
   return (
-    <div>
+    <>
       <TopNav />
-      <nav className="container mx-auto flex items-center bg-white justify-between px-5 p-2 pt-10 relative ">
-        <Link href="/" className="flex items-center gap-x-2">
-          <span className={`${montserrat.className} text-2xl `}>
-            YnadimeShop
-          </span>
-        </Link>
-        <div className="flex items-center gap-x-18">
-          <div className="hidden xl:flex gap-x-12 font-mono">
-            {/* Desktop Navigation underline in active link */}
-            <Link
-              href="/"
-              className={pathname === "/" ? "underline underline-offset-3" : ""}
+      <header
+        className={`sticky top-0 z-30 border-b border-neutral-200 bg-white transition-shadow ${isScrolled ? "shadow-sm" : ""}`}
+      >
+        <nav
+          aria-label="Main navigation"
+          className="container mx-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-x-6 lg:py-0"
+        >
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-2 text-neutral-950"
+          >
+            <span className="text-[#DB4444]">
+              <NavIcon name="bag" />
+            </span>
+            <span
+              className={`${montserrat.className} text-lg font-bold tracking-tight sm:text-xl`}
             >
-              Home
-            </Link>
-
-            <Link
-              href="/store"
-              className={
-                pathname === "/store" ? "underline underline-offset-3" : ""
-              }
-            >
-              Products
-            </Link>
-            <Link
-              href="/contact"
-              className={
-                pathname === "/contact" ? "underline underline-offset-3" : ""
-              }
-            >
-              Contact
-            </Link>
-            <Link
-              href="/about"
-              className={
-                pathname === "/about" ? "underline underline-offset-3" : ""
-              }
-            >
-              About
-            </Link>
-            {/* signup */}
-            {!isLoggedIn && (
+              YnadimeShop
+            </span>
+          </Link>
+          <div className="hidden h-[72px] items-center gap-6 xl:flex">
+            {links.map(({ label, href }) => (
               <Link
-                href="/signup"
-                className={
-                  pathname === "/signup" ? "underline underline-offset-3" : ""
-                }
+                key={href}
+                href={href}
+                aria-current={active(href) ? "page" : undefined}
+                className={`relative flex h-full items-center whitespace-nowrap text-sm font-medium transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 ${active(href) ? "text-[#DB4444] after:bg-[#DB4444]" : "text-neutral-600 hover:text-neutral-950"}`}
               >
-                Sign Up
+                {label}
               </Link>
-            )}
+            ))}
           </div>
-          <div className="xl:hidden">
-            <button onClick={toggleMenu} className="p-1">
-              {isOpen ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-7 h-7 text-black"
-                >
-                  <path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"></path>
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-7 h-7 text-black"
-                >
-                  <path d="M3 6h18v2H3V6zM3 12h18v2H3v-2zM3 18h18v2H3v-2z"></path>
-                </svg>
-              )}
+          <form
+            onSubmit={handleSearch}
+            role="search"
+            className="order-last flex h-10 w-full items-center gap-2 rounded-md border border-neutral-200 bg-neutral-50 px-3 focus-within:border-[#DB4444] lg:order-none lg:max-w-64 lg:flex-1"
+          >
+            <input
+              aria-label="Search products"
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search products..."
+              className="min-w-0 flex-1 bg-transparent text-sm text-neutral-900 outline-none placeholder:text-neutral-500"
+            />
+            <button
+              type="submit"
+              aria-label="Search"
+              className="text-neutral-500 hover:text-[#DB4444]"
+            >
+              <NavIcon name="search" />
             </button>
-            <MenuModal isOpen={isOpen} toggleMenu={toggleMenu} />
-          </div>
-        </div>
-
-        <div className="hidden xl:flex text-lg">
-          {/* search input */}
-          <input
-            type="text"
-            placeholder="What are you looking for?"
-            className="bg-neutral-100 rounded-l-lg p-3 px-5 text-sm w-50 focus:outline-none"
-          />
-          <button className="bg-neutral-100 rounded-r-lg px-1 py-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-6 h-6 text-black font-bold bg-neutral-100"
+          </form>
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <Link
+              href="/favorite"
+              aria-label={`Favorites, ${favoriteCount} items`}
+              className={iconClass("/favorite")}
             >
-              <path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748ZM12.1779 7.17624C11.4834 7.48982 11 8.18846 11 9C11 10.1046 11.8954 11 13 11C13.8115 11 14.5102 10.5166 14.8238 9.82212C14.9383 10.1945 15 10.59 15 11C15 13.2091 13.2091 15 11 15C8.79086 15 7 13.2091 7 11C7 8.79086 8.79086 7 11 7C11.41 7 11.8055 7.06167 12.1779 7.17624Z"></path>
-            </svg>
-          </button>
-          <div className="flex items-center gap-x-5 ml-6">
-            {/* favorite */}
-            <div
-              className={
-                pathname === "/favorite"
-                  ? "bg-[#DB4444] rounded-full p-1.5 text-white"
-                  : ""
-              }
+              <NavIcon name="heart" />
+              {countBadge(favoriteCount)}
+            </Link>
+            <Link
+              href="/card"
+              aria-label={`Cart, ${cartCount} items`}
+              className={iconClass("/card")}
             >
-              <Link href="/favorite">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="22"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path>
-                </svg>
-              </Link>
-            </div>
-            {/* card  */}
-            <div
-              className={
-                pathname === "/card"
-                  ? "bg-[#DB4444] rounded-full p-1.5 text-white"
-                  : ""
-              }
-            >
-              <Link href="/card">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="22"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M104,216a16,16,0,1,1-16-16A16,16,0,0,1,104,216Zm88-16a16,16,0,1,0,16,16A16,16,0,0,0,192,200ZM239.71,74.14l-25.64,92.28A24.06,24.06,0,0,1,191,184H92.16A24.06,24.06,0,0,1,69,166.42L33.92,40H16a8,8,0,0,1,0-16H40a8,8,0,0,1,7.71,5.86L57.19,64H232a8,8,0,0,1,7.71,10.14ZM221.47,80H61.64l22.81,82.14A8,8,0,0,0,92.16,168H191a8,8,0,0,0,7.71-5.86Z"></path>
-                </svg>
-              </Link>
-            </div>
-            {/* profile */}
-            {/* affiche is user auth */}
-            <div>
-              {isLoggedIn && (
+              <NavIcon name="cart" />
+              {countBadge(cartCount)}
+            </Link>
+            {isLoggedIn ? (
+              <div className="hidden items-center gap-2 xl:flex">
                 <Link
                   href="/profile"
-                  className={
-                    pathname === "/profile"
-                      ? "flex items-center gap-x-2 bg-[#DB4444] rounded-full p-1 text-white"
-                      : "flex items-center gap-x-2"
-                  }
+                  aria-label="Profile"
+                  className={iconClass("/profile")}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path>
-                  </svg>
+                  <NavIcon name="user" />
                 </Link>
-              )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    void auth.logout();
+                    router.push("/");
+                  }}
+                  className="text-xs font-medium text-neutral-600 hover:text-[#DB4444]"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="hidden items-center gap-3 border-l border-neutral-200 pl-3 xl:flex">
+                <Link
+                  href="/login"
+                  className={`text-sm font-medium ${active("/login") ? "text-[#DB4444]" : "text-neutral-700 hover:text-[#DB4444]"}`}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="rounded-md bg-[#DB4444] px-3 py-2 text-sm font-medium text-white hover:bg-[#c93939]"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+            <div className="xl:hidden">
+              <button
+                type="button"
+                onClick={toggleMenu}
+                aria-label={isOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isOpen}
+                className="flex size-10 items-center justify-center rounded-md text-neutral-900 hover:bg-neutral-100"
+              >
+                <NavIcon name={isOpen ? "close" : "menu"} />
+              </button>
+              <MenuModal
+                isOpen={isOpen}
+                toggleMenu={toggleMenu}
+                cartCount={cartCount}
+                favoriteCount={favoriteCount}
+                isLoggedIn={isLoggedIn}
+              />
             </div>
           </div>
+        </nav>
+      </header>
+      {cartNotice && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed right-4 top-4 z-[70] flex max-w-[calc(100vw-2rem)] items-center gap-3 rounded-lg border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-900 shadow-lg"
+        >
+          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-700">
+            ✓
+          </span>
+          {cartNotice}
         </div>
-      </nav>
-      <div className="border-b border-gray-300"></div>
-    </div>
+      )}
+    </>
   );
 }

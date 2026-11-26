@@ -22,7 +22,7 @@ const Status = [
         />
       </svg>
     ),
-    description: "Sallers active our site",
+    description: "Sellers active on our site",
   },
   {
     id: 2,
@@ -39,7 +39,7 @@ const Status = [
         <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm40-68a28,28,0,0,1-28,28h-4v8a8,8,0,0,1-16,0v-8H104a8,8,0,0,1,0-16h36a12,12,0,0,0,0-24H116a28,28,0,0,1,0-56h4V72a8,8,0,0,1,16,0v8h16a8,8,0,0,1,0,16H116a12,12,0,0,0,0,24h24A28,28,0,0,1,168,148Z"></path>
       </svg>
     ),
-    description: "Mopnthly Product Sale",
+    description: "Monthly product sales",
   },
   {
     id: 3,
@@ -79,7 +79,7 @@ const Status = [
         <path d="M184,48.81V32a16,16,0,0,0-16-16H88A16,16,0,0,0,72,32V48.81A40.05,40.05,0,0,0,40,88V200a40,40,0,0,0,40,40h96a40,40,0,0,0,40-40V88A40.05,40.05,0,0,0,184,48.81ZM168,48H152V32h16Zm-48,0V32h16V48ZM104,32V48H88V32Zm96,168a24,24,0,0,1-24,24H80a24,24,0,0,1-24-24V88A24,24,0,0,1,80,64h96a24,24,0,0,1,24,24Zm-40-40a24,24,0,0,1-24,24v8a8,8,0,0,1-16,0v-8h-8a8,8,0,0,1,0-16h24a8,8,0,0,0,0-16H120a24,24,0,0,1,0-48V96a8,8,0,0,1,16,0v8h8a8,8,0,0,1,0,16H120a8,8,0,0,0,0,16h16A24,24,0,0,1,160,160Z"></path>
       </svg>
     ),
-    description: "Anual gross sale in our site",
+    description: "Annual gross sales on our site",
   },
 ];
 export default function StatusSection() {
@@ -99,7 +99,7 @@ export default function StatusSection() {
               </div>
               <h2 className="text-3xl font-bold mt-4">{status.number}</h2>
               <div className="mt-3">
-                <h1 className="font-medium">{status.description}</h1>
+                <p className="font-medium">{status.description}</p>
               </div>
             </div>
           ))}

@@ -1,127 +1,364 @@
 "use client";
-import React from "react";
+
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { montserrat } from "@/app/fonts";
+
+const contactInfo = [
+  {
+    title: "Call us",
+    description: "Available 24/7, every day.",
+    icon: (
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2A18 18 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.7 3a2 2 0 0 1-.6 2.1L8 10a14 14 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.6l3 .7a2 2 0 0 1 1.7 2Z" />
+    ),
+    links: [
+      {
+        label: "(123) 456-7890",
+        href: "tel:+1234567890",
+      },
+    ],
+  },
+  {
+    title: "Email us",
+    description: "For support and general inquiries.",
+    icon: (
+      <>
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
+      </>
+    ),
+    links: [
+      {
+        label: "support@example.com",
+        href: "mailto:support@example.com",
+      },
+      {
+        label: "sales@example.com",
+        href: "mailto:sales@example.com",
+      },
+    ],
+  },
+  {
+    title: "Response time",
+    description: "We aim to respond within 24 hours.",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </>
+    ),
+    links: [],
+  },
+];
+
+const inputClass =
+  "min-h-12 w-full rounded-lg border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-[#DB4444] focus:ring-2 focus:ring-[#DB4444]/10";
+
+const labelClass =
+  "mb-2 block text-sm font-medium text-neutral-800";
 
 export default function ContactPage() {
+  const [status, setStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = Object.fromEntries(new FormData(form));
+
+    try {
+      const stored = JSON.parse(
+        window.localStorage.getItem(
+          "ynadime_contact_messages"
+        ) || "[]"
+      );
+
+      const existing = Array.isArray(stored) ? stored : [];
+
+      window.localStorage.setItem(
+        "ynadime_contact_messages",
+        JSON.stringify([...existing, formData])
+      );
+
+      form.reset();
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
+  }
+
   return (
-    <div className="container mx-auto px-5 py-10">
+    <main className="container mx-auto px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-24">
       {/* Breadcrumb */}
-      <h2 className="flex items-center gap-2 text-gray-700 font-semibold mb-8 text-sm md:text-base">
-        <span className="text-neutral-400"><Link href="/">Home</Link></span>
-        <span className="text-neutral-400">/</span>
-        <span>Contact</span>
-      </h2>
+      <nav
+        aria-label="Breadcrumb"
+        className="flex items-center gap-2 text-sm"
+      >
+        <Link
+          href="/"
+          className="text-neutral-500 transition-colors hover:text-[#DB4444]"
+        >
+          Home
+        </Link>
 
-      {/* Contact Info + Form */}
-      <div className="flex flex-col lg:flex-row gap-12 lg:gap-[50px lg:m-24">
-        {/* Left - Contact Info */}
-        <div className="flex flex-col gap-10 w-full lg:w-[40%]">
-          {/* Call To Us */}
-          <div className="flex flex-col gap-6">
-            <h1 className="text-lg font-bold flex items-center gap-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="37"
-                height="37"
-                fill="currentColor"
-                className="bg-[#DB4444] p-2 rounded-full text-white"
-                viewBox="0 0 256 256"
+        <span className="text-neutral-300">/</span>
+
+        <span
+          aria-current="page"
+          className="font-medium text-neutral-900"
+        >
+          Contact
+        </span>
+      </nav>
+
+      {/* Page header */}
+      <header className="border-b border-neutral-200 py-10 lg:py-14">
+        <span className="text-xs font-semibold uppercase tracking-widest text-[#DB4444]">
+          Contact us
+        </span>
+
+        <h1
+          className={`${montserrat.className} mt-4 text-3xl font-semibold tracking-tight text-neutral-950 sm:text-4xl lg:text-5xl`}
+        >
+          Let&apos;s get in touch.
+        </h1>
+
+        <p className="mt-4 max-w-xl text-sm leading-7 text-neutral-500 sm:text-base">
+          Have a question about your order, our products,
+          or anything else? We&apos;d love to hear from you.
+        </p>
+      </header>
+
+      {/* Main content */}
+      <div className="mt-10 grid items-start gap-8 lg:mt-14 lg:grid-cols-[0.85fr_1.5fr] lg:gap-16">
+
+        {/* Contact information */}
+        <aside className="rounded-xl bg-[#F5F5F5] p-6 sm:p-8">
+          <h2
+            className={`${montserrat.className} text-xl font-semibold tracking-tight text-neutral-900`}
+          >
+            Contact information
+          </h2>
+
+          <p className="mt-2 text-sm leading-6 text-neutral-500">
+            Choose the best way to reach us.
+          </p>
+
+          <div className="mt-8 divide-y divide-neutral-200">
+            {contactInfo.map((item) => (
+              <div
+                key={item.title}
+                className="flex items-start gap-4 py-6 first:pt-0 last:pb-0"
               >
-                <path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"></path>
-              </svg>
-              Call To Us
-            </h1>
-            <div className="text-sm font-medium text-gray-700 flex flex-col gap-2">
-              <p>We are available 24/7, 7 days a week.</p>
-              <p>Phone: (123) 456-7890</p>
-            </div>
+                {/* Icon */}
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-white text-[#DB4444]">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="size-5"
+                  >
+                    {item.icon}
+                  </svg>
+                </div>
+
+                {/* Information */}
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-neutral-900">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-1.5 text-sm leading-6 text-neutral-500">
+                    {item.description}
+                  </p>
+
+                  {item.links.length > 0 && (
+                    <div className="mt-3 flex flex-col gap-1.5">
+                      {item.links.map((link) => (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          className="break-all text-sm font-medium text-neutral-800 transition-colors hover:text-[#DB4444]"
+                        >
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
+        </aside>
 
-          <div className="border-b border-gray-400"></div>
+        {/* Contact form */}
+        <section className="min-w-0">
+          <h2
+            className={`${montserrat.className} text-2xl font-semibold tracking-tight text-neutral-900`}
+          >
+            Send us a message
+          </h2>
 
-          {/* Write To Us */}
-          <div className="flex flex-col gap-6">
-            <h1 className="text-lg font-bold flex items-center gap-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="37"
-                height="37"
-                fill="currentColor"
-                className="bg-[#DB4444] p-2 rounded-full text-white"
-                viewBox="0 0 256 256"
-              >
-                <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"></path>
-              </svg>
-              Write To Us
-            </h1>
-            <div className="text-sm font-medium text-gray-700 flex flex-col gap-2">
-              <p>
-                Fill out our form and we will contact <br /> you within 24
-                hours.
-              </p>
-              <p>Email: support@example.com</p>
-              <p>Email: support@example.com</p>
-            </div>
-          </div>
-        </div>
+          <p className="mt-2 text-sm leading-6 text-neutral-500">
+            Fill in the form below and let us know how we
+            can help.
+          </p>
 
-        {/* Right - Contact Form */}
-        <div className="w-full lg:w-[60%]">
-          <form className="flex flex-col gap-8">
-            {/* Input Group */}
-            <div className="flex flex-col lg:flex-row gap-5">
-              <div className="w-full">
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Your Name <span className="text-red-500">*</span>
+          <form
+            onSubmit={handleSubmit}
+            onChange={() => {
+              if (status !== "idle") setStatus("idle");
+            }}
+            className="mt-8 space-y-6"
+          >
+            {/* Name and email */}
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="contact-name"
+                  className={labelClass}
+                >
+                  Full name{" "}
+                  <span className="text-[#DB4444]">*</span>
                 </label>
+
                 <input
+                  id="contact-name"
+                  name="name"
                   type="text"
-                  placeholder="Your name"
-                  className="bg-neutral-100 text-base p-3 rounded-md w-full font-serif"
+                  autoComplete="name"
+                  placeholder="Enter your name"
+                  required
+                  className={inputClass}
                 />
               </div>
-              <div className="w-full">
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Your Email <span className="text-red-500">*</span>
+
+              <div>
+                <label
+                  htmlFor="contact-email"
+                  className={labelClass}
+                >
+                  Email address{" "}
+                  <span className="text-[#DB4444]">*</span>
                 </label>
+
                 <input
+                  id="contact-email"
+                  name="email"
                   type="email"
-                  placeholder="Your email"
-                  className="bg-neutral-100 text-base p-3 rounded-md w-full font-serif"
-                />
-              </div>
-              <div className="w-full">
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Your Phone <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Your phone"
-                  className="bg-neutral-100 text-base p-3 rounded-md w-full font-serif"
+                  autoComplete="email"
+                  placeholder="Enter your email"
+                  required
+                  className={inputClass}
                 />
               </div>
             </div>
 
-            {/* Textarea */}
+            {/* Phone */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Subject <span className="text-red-500">*</span>
+              <label
+                htmlFor="contact-phone"
+                className={labelClass}
+              >
+                Phone number
+                <span className="ml-2 text-xs font-normal text-neutral-400">
+                  Optional
+                </span>
               </label>
-              <textarea
-                placeholder="Your message"
-                className="bg-neutral-100 text-base p-3 rounded-md w-full h-40 resize-none font-serif"
-              ></textarea>
+
+              <input
+                id="contact-phone"
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                placeholder="Enter your phone number"
+                className={inputClass}
+              />
             </div>
 
-            {/* Submit Button */}
-            <div className="flex justify-end">
-              <button className="bg-[#DB4444] text-white px-8 py-3 rounded-sm font-semibold hover:bg-[#c33b3b] transition-colors">
-                Send Message
+            {/* Message */}
+            <div>
+              <label
+                htmlFor="contact-message"
+                className={labelClass}
+              >
+                Your message{" "}
+                <span className="text-[#DB4444]">*</span>
+              </label>
+
+              <textarea
+                id="contact-message"
+                name="message"
+                required
+                rows={6}
+                placeholder="How can we help you?"
+                className={`${inputClass} min-h-40 resize-y`}
+              />
+            </div>
+
+            {/* Form feedback */}
+            {status === "success" && (
+              <div
+                role="status"
+                className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700"
+              >
+                Your message has been saved locally.
+                It has not been sent to the support team.
+              </div>
+            )}
+
+            {status === "error" && (
+              <div
+                role="alert"
+                className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              >
+                Unable to save your message. Please try
+                again.
+              </div>
+            )}
+
+            {/* Submit */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-xs text-neutral-500">
+                Read our{" "}
+                <Link
+                  href="/info/privacy"
+                  className="underline underline-offset-2 hover:text-[#DB4444]"
+                >
+                  privacy policy
+                </Link>
+                .
+              </p>
+
+              <button
+                type="submit"
+                className="group inline-flex min-h-12 w-full cursor-pointer items-center justify-center gap-4 rounded-lg bg-[#DB4444] px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#c33b3b] sm:w-auto"
+              >
+                Send message
+
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-4 transition-transform group-hover:translate-x-1"
+                >
+                  <path d="M4 12h16m-6-6 6 6-6 6" />
+                </svg>
               </button>
             </div>
           </form>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }

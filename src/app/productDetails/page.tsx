@@ -1,10 +1,6 @@
-import React from 'react'
-import ProductDetails from "@/components/ProductDetails";
+import { redirect } from "next/navigation";
+import { products } from "@/data/products";
 
-export default function page() {
-  return (
-    <>
-      <ProductDetails />
-    </>
-  )
+export default function ProductDetailsPage() {
+  redirect(`/productDetails/${products[0].id}`);
 }

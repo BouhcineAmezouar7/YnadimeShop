@@ -1,176 +1,224 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-const Footer = React.memo(function Footer() {
+import { useState, type FormEvent } from "react";
+import Link from "next/link";
+import { montserrat } from "@/app/fonts";
+
+const footerLinks = [
+  {
+    title: "Shop",
+    links: [
+      { label: "All products", href: "/store" },
+      { label: "Clothing", href: "/store?category=Clothing" },
+      { label: "Accessories", href: "/store?category=Accessories" },
+      { label: "Electronics", href: "/store?category=Electronics" },
+    ],
+  },
+  {
+    title: "Account",
+    links: [
+      { label: "My account", href: "/profile" },
+      { label: "My orders", href: "/orders" },
+      { label: "Shopping cart", href: "/card" },
+      { label: "Wishlist", href: "/favorite" },
+      { label: "Login / Register", href: "/login" },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { label: "Contact us", href: "/contact" },
+      { label: "FAQs", href: "/info/faq" },
+      { label: "Privacy policy", href: "/info/privacy" },
+      { label: "Terms & conditions", href: "/info/terms" },
+    ],
+  },
+];
+
+export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleSubscribe(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!email.trim()) return;
+
+    // Connect your newsletter API here.
+    setSubmitted(true);
+  }
+
   return (
-    <footer className="bg-black text-white py-6">
-      <div className="container mx-auto px-4 space-y-10 m-3">
-        {/* Top Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Exclusive Section */}
-          <div className="flex flex-col gap-3">
-            <h2 className="text-2xl font-bold">Exclusive</h2>
-            <p className="font-semibold">Subscribe</p>
-            <p className="text-sm text-gray-400">
-              Get 10% off your first order
+    <footer className="bg-[#141414] text-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Newsletter */}
+        <div className="grid gap-8 border-b border-white/10 py-10 md:grid-cols-2 md:items-center lg:py-14">
+          <div>
+            <h2
+              className={`${montserrat.className} text-2xl font-semibold tracking-tight sm:text-3xl`}
+            >
+              Stay in the loop.
+            </h2>
+
+            <p className="mt-2 max-w-md text-sm leading-6 text-neutral-400">
+              Discover new products, exclusive offers and updates from
+              YnadimeShop.
             </p>
-            <div className="flex border border-gray-600 rounded overflow-hidden mt-2">
+          </div>
+
+          <div className="w-full md:max-w-md md:justify-self-end">
+            <form
+              onSubmit={handleSubscribe}
+              className="flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 p-1.5 focus-within:border-white/40"
+            >
+              <label htmlFor="footer-email" className="sr-only">
+                Email address
+              </label>
+
               <input
+                id="footer-email"
                 type="email"
-                placeholder="Enter your email"
-                className="bg-black text-white px-4 py-2 text-sm flex-1 focus:outline-none"
+                name="email"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  setSubmitted(false);
+                }}
+                required
+                autoComplete="email"
+                placeholder="Your email address"
+                className="min-w-0 flex-1 bg-transparent px-3 py-3 text-sm text-white outline-none placeholder:text-neutral-500"
               />
-              <button className="px-3 hover:text-gray-400 transition-colors">
+
+              <button
+                type="submit"
+                aria-label="Subscribe to newsletter"
+                className="flex size-11 shrink-0 items-center justify-center rounded-md bg-[#DB4444] text-white transition-colors hover:bg-[#c33b3b]"
+              >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-5"
                 >
-                  <path d="M231.87,114l-168-95.89A16,16,0,0,0,40.92,37.34L71.55,128,40.92,218.67A16,16,0,0,0,56,240a16.15,16.15,0,0,0,7.93-2.1l167.92-96.05a16,16,0,0,0,.05-27.89ZM56,224a.56.56,0,0,0,0-.12L85.74,136H144a8,8,0,0,0,0-16H85.74L56.06,32.16A.46.46,0,0,0,56,32l168,95.83Z"></path>
+                  <path d="M4 12h16m-6-6 6 6-6 6" />
                 </svg>
               </button>
-            </div>
-          </div>
+            </form>
 
-          {/* Support Section */}
-          <div className="flex flex-col gap-2">
-            <h2 className="text-xl font-bold">Support</h2>
-            <p className="text-sm text-gray-400">
-              111 Bijoy Sarani, Dhaka,
-              <br />
-              DH 1515, Bangladesh
-            </p>
-            <p className="text-sm text-gray-400">exclusive@gmail.com</p>
-            <p className="text-sm text-gray-400">+880 123 456 789</p>
-          </div>
-
-          {/* Account Section */}
-          <div className="flex flex-col gap-2">
-            <h2 className="text-xl font-bold">Account</h2>
-            {["My Account", "Login / Register", "Cart", "Wishlist", "Shop"].map(
-              (item) => (
-                <Link
-                  href="#"
-                  key={item}
-                  className="hover:underline text-sm text-gray-300"
-                >
-                  {item}
-                </Link>
-              )
+            {submitted && (
+              <p role="status" className="mt-3 text-xs text-neutral-400">
+                Newsletter subscription is not connected yet.
+              </p>
             )}
-          </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-col gap-2">
-            <h2 className="text-xl font-bold">Quick Links</h2>
-            {["Privacy Policy", "Terms & Conditions", "FAQ", "Contact Us"].map(
-              (item) => (
-                <Link
-                  href="#"
-                  key={item}
-                  className="hover:underline text-sm text-gray-300"
-                >
-                  {item}
-                </Link>
-              )
-            )}
-          </div>
-
-          {/* App Download */}
-          <div className="flex flex-col gap-3">
-            <h2 className="text-xl font-bold">Download App</h2>
-            <p className="text-sm text-gray-400">
-              Get our app for the best experience
+            <p className="mt-3 text-xs text-neutral-500">
+              Read our{" "}
+              <Link
+                href="/info/privacy"
+                className="underline underline-offset-2 hover:text-white"
+              >
+                privacy policy
+              </Link>
+              .
             </p>
-            <div className="flex gap-3">
-              <Image
-                src="/QrCode.png"
-                alt="QR Code"
-                width={90}
-                height={90}
-                className="cursor-pointer"
-              />
-              <div className="flex flex-col gap-2">
-                <Image
-                  src="/playStore.png"
-                  alt="Play Store"
-                  width={120}
-                  height={40}
-                  className="cursor-pointer"
-                />
-                <Image
-                  src="/appStore.png"
-                  alt="App Store"
-                  width={120}
-                  height={40}
-                  className="cursor-pointer"
-                />
-              </div>
-            </div>
-
-            {/* Social Icons */}
-            <div className="flex items-center gap-4 mt-4">
-              <Link href="#" className="text-white hover:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="44"
-                  height="44"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,191.63V152h24a8,8,0,0,0,0-16H136V112a16,16,0,0,1,16-16h16a8,8,0,0,0,0-16H152a32,32,0,0,0-32,32v24H96a8,8,0,0,0,0,16h24v63.63a88,88,0,1,1,16,0Z"></path>
-                </svg>
-              </Link>
-              <Link href="#" className="text-white hover:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="41"
-                  height="41"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.3l62.6,98.37-61.77,68a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z"></path>
-                </svg>
-              </Link>
-              <Link href="#" className="text-white hover:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="42"
-                  height="42"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path>
-                </svg>
-              </Link>
-              <Link href="#" className="text-white hover:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="42"
-                  height="42"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"></path>
-                </svg>
-              </Link>
-            </div>
           </div>
         </div>
 
-      </div>
-        {/* Divider */}
-        <div className="border-t border-neutral-900 mt-10"></div>
+        {/* Main footer */}
+        <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-12 lg:grid-cols-[1.5fr_1fr_1fr_1fr] lg:py-16">
+          {/* Brand */}
+          <div className="col-span-2 lg:col-span-1">
+            <Link
+              href="/"
+              className={`${montserrat.className} inline-block text-2xl font-bold tracking-tight`}
+            >
+              YnadimeShop
+              <span className="text-[#DB4444]">.</span>
+            </Link>
 
-        {/* Bottom Copyright */}
-        <p className="text-center text-sm text-gray-500 mt-5">
-          © {new Date().getFullYear()} YnadimeShop. All rights reserved.
-        </p>
+            <p className="mt-4 max-w-xs text-sm leading-7 text-neutral-400">
+              Your destination for modern fashion, innovative technology, and
+              everyday essentials. All in one place.
+            </p>
+
+            <Link
+              href="/contact"
+              className="group mt-6 inline-flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[#DB4444]"
+            >
+              Get in touch
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-4 transition-transform group-hover:translate-x-1"
+              >
+                <path d="M4 12h16m-6-6 6 6-6 6" />
+              </svg>
+            </Link>
+          </div>
+
+          {/* Navigation columns */}
+          {footerLinks.map((section) => (
+            <div key={section.title}>
+              <h3 className="mb-5 text-sm font-semibold text-white">
+                {section.title}
+              </h3>
+
+              <ul className="space-y-3">
+                {section.links.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="text-sm leading-relaxed text-neutral-400 transition-colors hover:text-white"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom footer */}
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 sm:flex-row">
+          <p className="text-center text-xs text-neutral-500 sm:text-left">
+            © {new Date().getFullYear()} YnadimeShop. All rights reserved.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-5">
+            <Link
+              href="/info/privacy"
+              className="text-xs text-neutral-400 transition-colors hover:text-white"
+            >
+              Privacy
+            </Link>
+
+            <Link
+              href="/info/terms"
+              className="text-xs text-neutral-400 transition-colors hover:text-white"
+            >
+              Terms
+            </Link>
+
+            <Link
+              href="/contact"
+              className="text-xs text-neutral-400 transition-colors hover:text-white"
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
+      </div>
     </footer>
   );
-});
-
-export default Footer;
+}

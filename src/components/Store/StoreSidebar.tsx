@@ -1,226 +1,60 @@
 "use client";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { products } from "@/data/products";
+import { initialFilters, matchesPrice, publishStoreFilters, type StoreFilters } from "./storeFilters";
 
-const categories = [
-  { name: "All", count: 120 },
-  { name: "Electronics", count: 40 },
-  { name: "Fashion", count: 25 },
-  { name: "Gaming", count: 15 },
-  { name: "Home & Kitchen", count: 20 },
-  { name: "Sports", count: 10 },
-];
+const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
+const brands = ["All", ...Array.from(new Set(products.map(p => p.brand))).sort()];
+const ranges = ["All", "$0 - $50", "$51 - $100", "$101 - $200", "$201 - $500", "$501+"];
 
-const brands = [
-  { name: "Brand A", count: 30 },
-  { name: "Brand B", count: 20 },
-  { name: "Brand C", count: 25 },
-  { name: "Brand D", count: 15 },
-];
-
-const prices = [
-  { range: "$0 - $50", count: 50 },
-  { range: "$51 - $100", count: 30 },
-  { range: "$101 - $200", count: 20 },
-  { range: "$201 - $500", count: 15 },
-  { range: "$501+", count: 5 },
-];
+function FilterGroup({ title, options, selected, onSelect }: {
+  title: string; options: { value: string; count: number }[]; selected: string; onSelect: (value: string) => void;
+}) {
+  return (
+    <details open className="group border-b border-neutral-200 py-4">
+      <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold [&::-webkit-details-marker]:hidden">
+        {title}<span aria-hidden="true" className="text-neutral-400 group-open:rotate-180">⌄</span>
+      </summary>
+      <div className="mt-3 max-h-64 space-y-1 overflow-y-auto">
+        {options.map(({ value, count }) => (
+          <label key={value} className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm ${selected === value ? "bg-[#DB4444]/5 text-[#DB4444]" : "text-neutral-600 hover:bg-neutral-50"}`}>
+            <input type="radio" name={`store-${title}`} checked={selected === value} onChange={() => onSelect(value)} className="size-4 shrink-0 accent-[#DB4444]" />
+            <span className="flex-1">{value === "All" ? `All ${title.toLowerCase()}` : value}</span><span className="text-xs tabular-nums text-neutral-500">{count}</span>
+          </label>
+        ))}
+      </div>
+    </details>
+  );
+}
 
 export default function StoreSidebar() {
-  const [isCategoryOpen, setIsCategoryOpen] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [isBrandOpen, setIsBrandOpen] = useState(true);
-  const [selectedBrand, setSelectedBrand] = useState("All");
-  const [isPriceOpen, setIsPriceOpen] = useState(true);
-  const [selectedPrice, setSelectedPrice] = useState("All");
-
-  const toggleCategory = () => {
-    setIsCategoryOpen(!isCategoryOpen);
-  };
-
-  const handleCategorySelect = (categoryName: string) => {
-    setSelectedCategory(categoryName);
-  };
-
-  const clearFilters = () => {
-    setSelectedCategory("All");
-  };
-
-  const toggleBrand = () => {
-    setIsBrandOpen(!isBrandOpen);
-  };
-  const handleBrandSelect = (brandName: string) => {
-    setSelectedBrand(brandName);
-  };
-
-  const _togglePrice = () => {
-    setIsPriceOpen(!isPriceOpen);
-  };
-  const handlePriceSelect = (priceRange: string) => {
-    setSelectedPrice(priceRange);
-  };
-
+  const params = useSearchParams();
+  const [filters, setFilters] = useState<StoreFilters>(initialFilters);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  useEffect(() => {
+    const category = params.get("category");
+    setFilters({ ...initialFilters, query: params.get("search") || "", category: category && categories.some(c => c === category) ? category : "All" });
+  }, [params]);
+  useEffect(() => { publishStoreFilters(filters); }, [filters]);
+  const update = (key: keyof StoreFilters, value: string) => setFilters(prev => ({ ...prev, [key]: value }));
+  const active = Number(!!filters.query) + Number(filters.category !== "All") + Number(filters.brand !== "All") + Number(filters.price !== "All");
   return (
-    <>
-      <div className="flex flex-col items-center">
-        <h3 className="text-center font-bold">Filters</h3>
-        <button
-          onClick={clearFilters}
-          className="px-16 py-1.5 border border-gray-400 text-neutral-500 rounded-2xl mt-2 text-sm hover:bg-gray-50 transition-colors"
-        >
-          Clear Filters
-        </button>
+    <div>
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-base font-semibold">Filters {active > 0 && <span className="text-[#DB4444]">({active})</span>}</h2>
+        <button type="button" onClick={() => setFilters(initialFilters)} className="text-xs font-medium text-[#DB4444] hover:underline">Clear all</button>
+        <button type="button" aria-expanded={mobileOpen} aria-controls="store-filter-panel" onClick={() => setMobileOpen(v => !v)} className="rounded-md border border-neutral-200 px-3 py-2 text-xs lg:hidden">{mobileOpen ? "Hide filters" : "Show filters"}</button>
       </div>
-      <div className="border-b border-gray-300 my-4"></div>
-      {/* search */}
-      <div className="px-2 flex items-center gap-2 border border-gray-300 rounded">
-        <input
-          type="text"
-          placeholder="Search products..."
-          className="w-full py-1.5 outline-none px-1"
-        />
-        <button>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-            />
-          </svg>
-        </button>
+      <div id="store-filter-panel" className={`${mobileOpen ? "block" : "hidden"} mt-5 lg:block`}>
+        <label className="flex items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2.5 focus-within:border-[#DB4444]">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-4 shrink-0 text-neutral-500"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+          <input aria-label="Search products" type="search" value={filters.query} onChange={e => update("query", e.target.value)} placeholder="Search products" className="min-w-0 flex-1 bg-transparent text-sm outline-none" />
+        </label>
+        <FilterGroup title="Categories" selected={filters.category} onSelect={v => update("category", v)} options={categories.map(value => ({ value, count: products.filter(p => value === "All" || p.category === value).length }))} />
+        <FilterGroup title="Brands" selected={filters.brand} onSelect={v => update("brand", v)} options={brands.map(value => ({ value, count: products.filter(p => value === "All" || p.brand === value).length }))} />
+        <FilterGroup title="Prices" selected={filters.price} onSelect={v => update("price", v)} options={ranges.map(value => ({ value, count: products.filter(p => matchesPrice(p.price, value)).length }))} />
       </div>
-      {/* Category */}
-      <div className="mt-8 px-2">
-        <div
-          className="flex justify-between items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors"
-          onClick={toggleCategory}
-        >
-          <h3 className="font-bold">
-            {isCategoryOpen ? " - " : " + "}
-            Category
-          </h3>
-        </div>
-
-        {/* Collapsible Category List */}
-        <div
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            isCategoryOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <ul className="px-3 mt-2">
-            {categories.map((category) => (
-              <li
-                key={category.name}
-                onClick={() => handleCategorySelect(category.name)}
-                className={`cursor-pointer flex justify-between items-center text-sm p-2 rounded hover:bg-gray-100 transition-colors ${
-                  selectedCategory === category.name ? "" : "text-neutral-500"
-                }`}
-              >
-                {category.name}
-                <span>
-                  <sup
-                    className={`ml-1 text-xs rounded-full px-1.5 py-0.5 ${
-                      selectedCategory === category.name
-                        ? "bg-white text-[#DB4444]"
-                        : "bg-gray-300 text-white"
-                    }`}
-                  >
-                    {category.count}
-                  </sup>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      {/* Brands */}
-      <div className="mt-1 px-2">
-        <div
-          className="flex justify-between items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors"
-          onClick={toggleBrand}
-        >
-          <h3 className="font-bold">
-            {" "}
-            {isCategoryOpen ? " - " : " + "} Brandes
-          </h3>
-        </div>
-
-        {/* Collapsible Category List */}
-        <div
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            isBrandOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <ul className="px-3 mt-1.5">
-            {brands.map((brand) => (
-              <li
-                key={brand.name}
-                onClick={() => handleBrandSelect(brand.name)}
-                className={`cursor-pointer flex justify-between items-center text-sm p-2 rounded hover:bg-gray-100 transition-colors ${
-                  selectedBrand === brand.name ? "" : "text-neutral-500"
-                }`}
-              >
-                {brand.name}
-                <span>
-                  <sup
-                    className={`ml-1 text-xs rounded-full px-1.5 py-0.5 ${
-                      selectedBrand === brand.name
-                        ? "bg-white text-[#DB4444]"
-                        : "bg-gray-300 text-white"
-                    }`}
-                  >
-                    {brand.count}
-                  </sup>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      {/* Prices */}
-      <div className="mt-1 px-2">
-        <div className="items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
-          <h3 className="font-bold">Price</h3>
-          <div>
-            <ul className="px-3 mt-1.5">
-              {prices.map((price) => (
-                <li key={price.range} className="text-sm p-1">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedPrice === price.range}
-                      onChange={() => handlePriceSelect(price.range)}
-                      className="accent-[#DB4444]"
-                    />
-                    <span
-                      className={`${
-                        selectedPrice === price.range ? "" : "text-neutral-500"
-                      }`}
-                    >
-                      {price.range}
-                    </span>
-                    <sup
-                      className={`ml-1 text-xs rounded-full px-1.5 py-0.5 ${
-                        selectedPrice === price.range
-                          ? "bg-white text-[#DB4444]"
-                          : "bg-gray-300 text-white"
-                      }`}
-                    >
-                      {price.count}
-                    </sup>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 }

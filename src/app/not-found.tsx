@@ -6,13 +6,13 @@ export default function NotFound() {
     <>
       <div className="container mx-auto p-16 px-5">
         <h2 className="gap-5 flex items-center font-semibold text-gray-700">
-          <span className=" text-neutral-400">Home</span>
+          <Link href="/" className="text-neutral-400 hover:underline">Home</Link>
           <span className="text-neutral-400">/</span>
           <span className="">Not Found</span>
         </h2>
-        <div className="flex flex-col items-center justify-center h-96 gap-8 m-15">
-          <h1 className="text-8xl font-semibold">404 - Not Found</h1>
-          <p className="text-lg text-neutral-500 mt-4">
+        <div className="flex flex-col items-center justify-center min-h-96 gap-8 my-15 text-center">
+          <h1 className="text-4xl sm:text-6xl lg:text-8xl font-semibold">404 - Not Found</h1>
+          <p className="text-base sm:text-lg text-neutral-500 mt-4">
             Your visited page not found. Please check the URL or return to the
             homepage.
           </p>

@@ -75,6 +75,7 @@ export default function TeamSection() {
                     alt={`${member.name} image`}
                     width={900}
                     height={900}
+                    sizes="(max-width: 768px) 200px, 20vw"
                     className="w-50 h-50 rounded-full mx-auto transition-all duration-500 object-cover border border-solid border-transparent group-hover:border-[#DB4444]"
                   />
                 </div>
@@ -91,6 +92,7 @@ export default function TeamSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 hover:bg-[#1DA1F2] rounded-full flex items-center justify-center transition-colors duration-300 group"
+                    aria-label={`${member.name} on Twitter`}
                   >
                     <svg
                       className="w-4 h-4 text-gray-600"
@@ -105,6 +107,7 @@ export default function TeamSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 hover:bg-[#0077B5] rounded-full flex items-center justify-center transition-colors duration-300 group"
+                    aria-label={`${member.name} on LinkedIn`}
                   >
                     <svg
                       className="w-4 h-4 text-gray-600"
@@ -119,6 +122,7 @@ export default function TeamSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 rounded-full flex items-center justify-center transition-colors duration-300 group"
+                    aria-label={`${member.name} on Instagram`}
                   >
                     <svg
                       className="w-4 h-4 text-gray-600"
